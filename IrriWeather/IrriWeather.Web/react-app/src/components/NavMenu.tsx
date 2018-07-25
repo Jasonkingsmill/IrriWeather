@@ -12,7 +12,7 @@ export class NavMenu extends React.Component<{}, {}> {
                         <span className='icon-bar'></span>
                         <span className='icon-bar'></span>
                     </button>
-                    <Link className='navbar-brand' to={ '/' }>IrriWeather.Web</Link>
+                    <Link className='navbar-brand' to={ '/' }>IrriWeather</Link>
                 </div>
                 <div className='clearfix'></div>
                 <div className='navbar-collapse collapse'>
@@ -23,13 +23,18 @@ export class NavMenu extends React.Component<{}, {}> {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to={ '/counter' } activeClassName='active'>
-                                <span className='glyphicon glyphicon-education'></span> Counter
+                            <NavLink to={'/weather'} activeClassName='active'>
+                                <span className='glyphicon glyphicon-cloud'></span> Weather
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to={ '/fetchdata' } activeClassName='active'>
-                                <span className='glyphicon glyphicon-th-list'></span> Fetch data
+                            <NavLink to={'/irrigation'} activeClassName='active'>
+                                <span className='glyphicon glyphicon-leaf'></span> Irrigation
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to={'/settings'} activeClassName='active'>
+                                <span className='glyphicon glyphicon-cog'></span> Settings
                             </NavLink>
                         </li>
                     </ul>

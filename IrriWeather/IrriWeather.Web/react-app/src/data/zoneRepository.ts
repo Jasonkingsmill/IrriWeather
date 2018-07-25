@@ -26,37 +26,15 @@ export class ZoneRepository {
             return null;
         }
 
-        let dto = await this.fetchClientDetails(id);
-        if (dto == undefined)
-            throw new Error('Client not found');
+        //let dto = await this.fetchClientDetails(id);
+        //if (dto == undefined)
+        //    throw new Error('Client not found');
 
-        let client = DataMapper.mapClientApiModelToClient(dto);
-         
+        //let client = DataMapper.mapClientApiModelToClient(dto);
+
+        let client = {} as ZoneApiModel;
         return client;
     }
 
-    public async add(zone: ZoneApiModel) {
-        console.log('Adding zone to repository');
-        try {
-            let response = await fetch(this.baseUrl + 'zones', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(zone)
-            });
-            let data = await response.json() as ApiResponseModel;
-            if (data.code >= 200 && data.code < 300) {
-                let client = Object.assign({}, data.payload);
-                return client;
-            } else {
-                return {};
-            }
-        } catch (error) {
-            console.log('Create client failed. ' + error);
-        }
-    
-    }
 }
 

@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { BrowserRouter } from 'react-router-dom';
 import * as RoutesModule from './routes';
+import './css/site.css';
+
 let routes = RoutesModule.routes;
 
 function renderApp() {
