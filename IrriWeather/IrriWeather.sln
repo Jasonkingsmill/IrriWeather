@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Web", "IrriWeather.Web\IrriWeather.Web.csproj", "{B00292C8-7D7F-4FA3-B55D-9E261C7CBEC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Irrigation", "IrriWeather.Irrigation\IrriWeather.Irrigation.csproj", "{51C44EA7-A665-4554-8311-51B7065F4C0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrriWeather.Irrigation", "IrriWeather.Irrigation\IrriWeather.Irrigation.csproj", "{51C44EA7-A665-4554-8311-51B7065F4C0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Weather", "IrriWeather.Weather\IrriWeather.Weather.csproj", "{0B53747B-07D0-4D24-8049-6D7EA59FEE49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrriWeather.Weather", "IrriWeather.Weather\IrriWeather.Weather.csproj", "{0B53747B-07D0-4D24-8049-6D7EA59FEE49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Web", "IrriWeather.Web\IrriWeather.Web.csproj", "{CCA6237B-904B-48DE-9FCC-815EABB771A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B00292C8-7D7F-4FA3-B55D-9E261C7CBEC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B00292C8-7D7F-4FA3-B55D-9E261C7CBEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B00292C8-7D7F-4FA3-B55D-9E261C7CBEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B00292C8-7D7F-4FA3-B55D-9E261C7CBEC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51C44EA7-A665-4554-8311-51B7065F4C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51C44EA7-A665-4554-8311-51B7065F4C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C44EA7-A665-4554-8311-51B7065F4C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{0B53747B-07D0-4D24-8049-6D7EA59FEE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B53747B-07D0-4D24-8049-6D7EA59FEE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B53747B-07D0-4D24-8049-6D7EA59FEE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCA6237B-904B-48DE-9FCC-815EABB771A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCA6237B-904B-48DE-9FCC-815EABB771A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCA6237B-904B-48DE-9FCC-815EABB771A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCA6237B-904B-48DE-9FCC-815EABB771A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

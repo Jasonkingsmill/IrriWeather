@@ -1,0 +1,35 @@
+{
+  "name": "react-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "automapper-ts": "^1.9.0",
+    "react": "^16.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.0",
+    "@types/node": "^10.5.2",
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-hot-loader": "^4.1.0",
+    "@types/react-router": "^4.0.29",
+    "@types/react-router-dom": "^4.3.0",
+    "@types/webpack-env": "^1.13.6",
+    "aspnet-webpack": "^2.0.1",
+    "aspnet-webpack-react": "^3.0.0",
+    "awesome-typescript-loader": "3.2.1",
+    "react-dom": "^16.4.1",
+    "react-hot-loader": "^3.0.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts-ts": "2.16.0",
+    "typescript": "^2.9.2",
+    "webpack": "2.5.1",
+    "webpack-hot-middleware": "2.18.2"
+  }
+}
