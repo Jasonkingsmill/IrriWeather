@@ -1,6 +1,6 @@
 ﻿
-export interface ZoneApiModel {
-    id: number,
+export class ZoneApiModel {
+    id: number;
     name: string;
     description: string;
     channel: number;

@@ -1,20 +1,16 @@
 ﻿import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-interface ZoneTableRowProps {
+interface IZoneTableRowProps {
     id: number;
     name: string;
     description: string;
-    channel: string;
-    isEnabled: string;
+    channel: number;
+    isEnabled: boolean;
 }
 
-export class ZoneTableRow extends React.Component<ZoneTableRowProps, {}> {
-
-    constructor() {
-        super();
-    }
-
+export class ZoneTableRow extends React.Component<IZoneTableRowProps, {}> {
+    
     public render() {
         return (
             <tr>
@@ -22,7 +18,7 @@ export class ZoneTableRow extends React.Component<ZoneTableRowProps, {}> {
                 <td>{this.props.description}</td>
                 <td>{this.props.channel}</td>
                 <td>{this.props.isEnabled}</td>
-                <td><span className="btn btn-default" ><Link to={'/zone/' + this.props.id}>Edit</Link></span></td>
+                <td><span className="btn btn-default" ><Link to={'/irrigation/zones/' + this.props.id}>Edit</Link></span></td>
             </tr>
             );
     }

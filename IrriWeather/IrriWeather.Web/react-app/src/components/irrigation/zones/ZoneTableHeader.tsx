@@ -6,7 +6,7 @@ export const ZoneTableHeader = () => {
         <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Status</th>
+            <th>Channel</th>
             <th>IsEnabled</th>
         </tr>
     );

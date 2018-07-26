@@ -1,33 +1,39 @@
 ﻿import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ZoneList } from './ZoneList';
-import { ZoneRepository as repo } from '../../../data/zoneRepository';
+import { ZoneRepository } from '../../../data/ZoneRepository';
 import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
 
 
 export class Zones extends React.Component<RouteComponentProps<{}>, {}> {
     state: {
-        zones: ZoneApiModel[]
+        zones: Array<ZoneApiModel>
     }
-
     constructor(props: RouteComponentProps<{}>) {
         super(props);
-        this.state.zones.push(;
-        //var res = repo.prototype.getAll();
-        //res.then((data) => {
-        //    this.state.zones = data;
-        //});
-        //res.catch((err) => {
-        //    throw new Error('');
-        //});
+        this.state = {
+            zones: new Array<ZoneApiModel>()
+        }
     }
-    componentWillMount() {
 
+    private loadZones() {
+        let repo = new ZoneRepository('');
+        repo.getAll().then((data) => {
+            this.setState({ zones: data });
+        });
     }
+
     componentDidMount() {
-        repo.default.prototype.getAll();
-    }
+        this.loadZones();
+    };
+    
+    componentWillReceiveProps(nextProps: any) {
+        this.loadZones();
+    };
+
+
+
     public render() {
-        return <ZoneList {this.state.zones}/>
+        return <ZoneList zones={this.state.zones} />
     }
 }

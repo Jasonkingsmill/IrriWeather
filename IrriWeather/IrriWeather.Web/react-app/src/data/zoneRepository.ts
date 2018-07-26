@@ -10,11 +10,20 @@ export class ZoneRepository {
 
     public async getAll(): Promise<ZoneApiModel[]> {
         try {
-            let response = await fetch(this.baseUrl + 'zone');
-            if (!response.ok)
-                throw new DOMException("Response failed");
-            let data = await response.json() as ZoneApiModel[];
-            return data;
+            let zones = new Array<ZoneApiModel>();
+            zones.push({
+                id: 1,
+                channel: 2,
+                name: 'my first zone',
+                description: 'first zone to be created',
+                isEnabled: true
+            });
+            return zones;
+            //let response = await fetch(this.baseUrl + 'zone');
+            //if (!response.ok)
+            //    throw new DOMException("Response failed");
+            //let data = await response.json() as ZoneApiModel[];
+            //return data;
         } catch (error) {
             throw new Error('Failed to retrieve zone list'); 
         }

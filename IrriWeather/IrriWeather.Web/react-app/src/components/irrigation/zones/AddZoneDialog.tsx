@@ -22,20 +22,18 @@ let AddZoneDialog: any = (props: AddZoneDialogProps) => {
                         <div className='form-group' >
                             <label htmlFor='zoneName' className='col-sm-4 control-label'>Zone Name</label>
                             <div>
-                                <Input
+                                <input
                                     name="zoneName"
-                                    component="input"
                                     type="text"
                                     placeholder="Client"
                                 />
-                            </div>
+                            </div> 
                         </div>
                         <div className='form-group' >
                             <label htmlFor='description' className='col-sm-4 control-label'>Description</label>
                             <div>
-                                <Field
+                                <input
                                     name="description"
-                                    component="input"
                                     type="text"
                                     placeholder="Description"
                                 />
@@ -44,9 +42,8 @@ let AddZoneDialog: any = (props: AddZoneDialogProps) => {
                         <div className='form-group' >
                             <label htmlFor='channel' className='col-sm-4 control-label'>Channel Number</label>
                             <div>
-                                <Field
+                                <input
                                     name="channel"
-                                    component="input"
                                     type="number"
                                     placeholder="0-31"
                                 />
