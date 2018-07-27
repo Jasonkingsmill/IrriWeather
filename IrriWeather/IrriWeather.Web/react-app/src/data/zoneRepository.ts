@@ -16,7 +16,8 @@ export class ZoneRepository {
                 channel: 2,
                 name: 'my first zone',
                 description: 'first zone to be created',
-                isEnabled: true
+                isEnabled: true,
+                running: true
             });
             return zones;
             //let response = await fetch(this.baseUrl + 'zone');

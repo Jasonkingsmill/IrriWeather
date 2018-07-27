@@ -1,4 +1,5 @@
 ﻿using IrriWeather.Irrigation.Domain;
+using IrriWeather.Irrigation.Domain.Schedule;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,7 @@ namespace IrriWeather.Irrigation.Data
         private readonly string dataSource;
 
         public DbSet<Zone> Zones { get; set; }
+        public DbSet<Trigger> Triggers { get; set; }
 
         public IrrigationContext(string dataSource)
         {
@@ -26,6 +28,9 @@ namespace IrriWeather.Irrigation.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Zone>().HasIndex(x => x.Channel).IsUnique(true);
+
+
+            modelBuilder.Entity<DayOfWeekTrigger>();
         }
     }
 }

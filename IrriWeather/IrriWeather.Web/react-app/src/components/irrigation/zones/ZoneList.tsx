@@ -12,7 +12,6 @@ interface IZoneListProps {
 export class ZoneList extends React.Component<IZoneListProps, {}> {
     constructor(props: IZoneListProps) {
         super(props);
-        this.addZone = this.addZone.bind(this);
     }
     
     public componentDidMount() {
@@ -27,7 +26,7 @@ export class ZoneList extends React.Component<IZoneListProps, {}> {
                         <div className="box">
                             <ZoneListBoxHeader />
                             <ZoneListBoxBody zones={this.props.zones} />
-                            <ZoneListBoxFooter onAddZone={this.addZone} />
+                            <ZoneListBoxFooter />
                         </div>
                     </div>
                 </div>
@@ -35,9 +34,6 @@ export class ZoneList extends React.Component<IZoneListProps, {}> {
         );
     }
 
-    public addZone() {
-        //this.props.addZone();
-    }
 
 }
 

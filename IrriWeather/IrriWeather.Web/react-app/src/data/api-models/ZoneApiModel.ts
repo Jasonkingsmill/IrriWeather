@@ -5,6 +5,7 @@ export class ZoneApiModel {
     description: string;
     channel: number;
     isEnabled: boolean;
+    running: boolean;
 }
 
 export default ZoneApiModel;
