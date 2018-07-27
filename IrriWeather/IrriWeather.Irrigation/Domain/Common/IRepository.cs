@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IrriWeather.Irrigation.Domain
+namespace IrriWeather.Irrigation.Domain.Common
 {
     public interface IRepository
     {

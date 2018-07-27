@@ -1,4 +1,5 @@
 ﻿using IrriWeather.Irrigation.Domain;
+using IrriWeather.Irrigation.Domain.Control;
 using IrriWeather.Irrigation.Domain.Schedule;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IrriWeather.Irrigation.Data
+namespace IrriWeather.Irrigation.Infrastructure.Data
 {
     public class IrrigationContext : DbContext
     {
@@ -31,6 +32,8 @@ namespace IrriWeather.Irrigation.Data
 
 
             modelBuilder.Entity<DayOfWeekTrigger>();
+            modelBuilder.Entity<EvenDaysTrigger>();
+            modelBuilder.Entity<OddDaysTrigger>();
         }
     }
 }

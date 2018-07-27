@@ -1,10 +1,11 @@
 ﻿using IrriWeather.Irrigation.Domain;
+using IrriWeather.Irrigation.Domain.Control;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IrriWeather.Irrigation.Data
+namespace IrriWeather.Irrigation.Infrastructure.Data
 {
     public class ZoneRepository : IZoneRepository
     {

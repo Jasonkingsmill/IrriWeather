@@ -6,6 +6,10 @@ namespace IrriWeather.Irrigation.Domain.Schedule
 {
     public enum TriggerType
     {
-        DayOfWeek
+        DayOfWeek,
+        DayOfMonth,
+        EvenDays,
+        OddDays,
+        DateTime
     }
 }

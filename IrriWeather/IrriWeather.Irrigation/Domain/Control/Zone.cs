@@ -1,6 +1,7 @@
-﻿using System;
+﻿using IrriWeather.Irrigation.Domain.Common;
+using System;
 
-namespace IrriWeather.Irrigation.Domain
+namespace IrriWeather.Irrigation.Domain.Control
 {
     public class Zone : Entity
     {
@@ -17,9 +18,5 @@ namespace IrriWeather.Irrigation.Domain
         public int Channel { get; private set; }
         public bool IsEnabled { get; private set; }
         
-        public bool CurrentState(IChannelStateService channelStateService)
-        {
-            return channelStateService.GetState(Channel);
-        }
     }
 }
