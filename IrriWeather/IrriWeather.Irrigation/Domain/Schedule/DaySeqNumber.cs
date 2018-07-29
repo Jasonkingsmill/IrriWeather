@@ -4,12 +4,11 @@ using System.Text;
 
 namespace IrriWeather.Irrigation.Domain.Schedule
 {
-    public enum TriggerType
+    public enum DaySeqNumber
     {
-        DaysOfWeek,
-        DaysOfMonth,
-        EvenDays,
-        OddDays,
-        DateTime
+        First = 1,
+        Second = 2,
+        Third = 3,
+        Fourth = 4,
     }
 }

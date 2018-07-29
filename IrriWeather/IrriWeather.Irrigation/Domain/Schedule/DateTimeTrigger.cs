@@ -8,7 +8,7 @@ namespace IrriWeather.Irrigation.Domain.Schedule
     {
         private DateTimeTrigger() { }
 
-        private DateTimeTrigger(DateTime startTime, TimeSpan duration)
+        public DateTimeTrigger(DateTime startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled) : base(duration, enabledUntil, isEnabled)
         {
             Type = TriggerType.DateTime;
 
@@ -22,5 +22,10 @@ namespace IrriWeather.Irrigation.Domain.Schedule
         
 
         public DateTime StartTime { get; private set; }
+
+        public override string BuildCronExpression()
+        {
+            return CronExpression.AtSpecificDateTime(StartTime.Year, (Months)StartTime.Month, StartTime.Day, StartTime.Hour, StartTime.Minute);
+        }
     }
 }

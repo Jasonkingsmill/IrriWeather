@@ -30,7 +30,8 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
         {
             modelBuilder.Entity<Zone>().HasIndex(x => x.Channel).IsUnique(true);
 
-
+            modelBuilder.Entity<DateTimeTrigger>();
+            modelBuilder.Entity<DayOfMonthTrigger>();
             modelBuilder.Entity<DayOfWeekTrigger>();
             modelBuilder.Entity<EvenDaysTrigger>();
             modelBuilder.Entity<OddDaysTrigger>();

@@ -7,11 +7,10 @@ namespace IrriWeather.Irrigation.Domain.Schedule
 {
     public class DayOfWeekTrigger : Trigger
     {
-        private HashSet<DayOfWeek> days = new HashSet<DayOfWeek>();
 
-        private DayOfWeekTrigger(TimeSpan startTime, TimeSpan duration)
+        public DayOfWeekTrigger(DaysOfWeek days, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled) : base(duration, enabledUntil, isEnabled)
         {
-            Type = TriggerType.DayOfWeek;
+            Type = TriggerType.DaysOfWeek;
 
             if (startTime == null)
                 throw new ArgumentNullException(nameof(startTime));
@@ -22,23 +21,18 @@ namespace IrriWeather.Irrigation.Domain.Schedule
 
             StartTime = startTime;
             Duration = duration;
+            Days = days;
         }
 
-        public DayOfWeekTrigger(DayOfWeek day, TimeSpan startTime, TimeSpan duration) : this(startTime, duration)
-        {
-            days.Add(day);
-        }
 
-        public DayOfWeekTrigger(IEnumerable<DayOfWeek> days, TimeSpan startTime, TimeSpan duration) : this(startTime, duration)
-        {
-            if (days == null || days.Count() == 0)
-                throw new ArgumentNullException(nameof(days));
 
-            foreach (var day in days)
-                this.days.Add(day);
-        }
-
-        public IEnumerable<DayOfWeek> Days { get => this.days; set => this.days = value.ToHashSet(); }
+        public DaysOfWeek Days { get; private set; }
         public TimeSpan StartTime { get; private set; }
+
+
+        public override string BuildCronExpression()
+        {
+            return CronExpression.EverySpecificWeekDayAt(StartTime.Hours, StartTime.Minutes, Days);
+        }
     }
 }

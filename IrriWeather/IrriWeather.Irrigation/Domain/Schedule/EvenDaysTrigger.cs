@@ -8,7 +8,7 @@ namespace IrriWeather.Irrigation.Domain.Schedule
     {
         private EvenDaysTrigger() { }
 
-        public EvenDaysTrigger(TimeSpan startTime, TimeSpan duration)
+        public EvenDaysTrigger(TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled) : base(duration, enabledUntil, isEnabled)
         {
             Type = TriggerType.EvenDays;
 
@@ -24,5 +24,12 @@ namespace IrriWeather.Irrigation.Domain.Schedule
         }
 
         public TimeSpan StartTime { get; private set; }
+
+
+
+        public override string BuildCronExpression()
+        {
+            return CronExpression.EverySpecificDaysEveryNMonthAt(new int[] { 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30}, 1, StartTime.Hours, StartTime.Minutes);
+        }
     }
 }
