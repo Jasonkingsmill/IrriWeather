@@ -9,7 +9,7 @@ using IrriWeather.Irrigation.Domain.Control;
 
 namespace IrriWeather.Irrigation.Application
 {
-    public class ZoneService : IZoneService
+    public class ZoneService : IZoneControlService
     {
         private readonly IZoneRepository zoneRepository;
 

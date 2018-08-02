@@ -8,7 +8,7 @@ using Unosquare.PiGpio.NativeEnums;
 
 namespace IrriWeather.Irrigation.Infrastructure.Control
 {
-    public class ZoneService : IZoneService
+    public class ZoneControlService : IZoneControlService
     {
 
         public void SetState(int zone, bool on)

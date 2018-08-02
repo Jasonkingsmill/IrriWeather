@@ -1,5 +1,7 @@
 ﻿using IrriWeather.Irrigation.Application;
 using IrriWeather.Irrigation.Application.Schedule;
+using IrriWeather.Irrigation.Domain.Control;
+using IrriWeather.Irrigation.Infrastructure.Control;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using System;
@@ -19,6 +21,7 @@ namespace IrriWeather.Web
 
             services.AddTransient<JobFactory>(x=> new JobFactory(x));
             services.AddSingleton<SchedulingService>();
+            services.AddSingleton<IZoneControlService, ZoneControlService>();
 
             return services;
         }
