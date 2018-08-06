@@ -1,18 +1,24 @@
-﻿using IrriWeather.Irrigation.Domain.Control;
+﻿using IrriWeather.IO;
+using IrriWeather.Irrigation.Domain.Control;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Unosquare.PiGpio;
-using Unosquare.PiGpio.NativeEnums;
 
 namespace IrriWeather.Irrigation.Infrastructure.Control
 {
     public class ChannelControlService : IChannelControlService
     {
+        private readonly GpioService gpioService;
+
+        public ChannelControlService(GpioService gpioService)
+        {
+            this.gpioService = gpioService;
+        }
 
         public void SetState(int zone, bool on)
         {
+            gpioService.
             Board.Pins[zone].Value = on;
         }
 

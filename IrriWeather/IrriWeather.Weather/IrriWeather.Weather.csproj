@@ -5,18 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Hardware\**" />
+    <EmbeddedResource Remove="Hardware\**" />
+    <None Remove="Hardware\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
     <PackageReference Include="Quartz" Version="3.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IrriWeather.IO\IrriWeather.IO.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="pigpio-dotnet">
       <HintPath>..\References\pigpio-dotnet.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Hardware\" />
   </ItemGroup>
 
 </Project>

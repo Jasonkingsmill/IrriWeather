@@ -10,9 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="pigpio-dotnet">
-      <HintPath>..\References\pigpio-dotnet.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\IrriWeather.IO\IrriWeather.IO.csproj" />
   </ItemGroup>
 
 </Project>
