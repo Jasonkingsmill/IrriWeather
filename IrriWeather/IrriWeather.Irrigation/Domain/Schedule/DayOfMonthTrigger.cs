@@ -7,6 +7,7 @@ namespace IrriWeather.Irrigation.Domain.Schedule
 {
     public class DayOfMonthTrigger : Trigger
     {
+        private string _days = "";
         private HashSet<int> days = new HashSet<int>();
 
         private DayOfMonthTrigger() { }
@@ -43,7 +44,7 @@ namespace IrriWeather.Irrigation.Domain.Schedule
             }
         }
 
-        public IEnumerable<int> Days { get => this.days; set => this.days = value.ToHashSet(); }
+        public IEnumerable<int> Days { get => _days.Split(";").Select(x=>int.Parse(x)); set => this._days = string.Join(";", value); }
         public TimeSpan StartTime { get; private set; }
 
         public override string BuildCronExpression()

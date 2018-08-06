@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace IrriWeather.Web.ViewModels
 {
-    public class ZoneSummaryViewModel
+    public class AddZoneViewModel
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Channel { get; set; }

@@ -22,7 +22,7 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
             context.SaveChanges();
         }
 
-        public Zone Find(int id)
+        public Zone Find(Guid id)
         {
             return context.Zones.FirstOrDefault(x => x.Id == id);
         }

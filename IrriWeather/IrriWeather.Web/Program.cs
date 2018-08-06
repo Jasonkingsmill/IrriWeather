@@ -18,15 +18,24 @@ namespace IrriWeather.Web
     public class Program
     {
 
+        public static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
 
-            var services = DependencyInjection.GetServices();
+
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+            Configuration = builder.Build();
+
+            var services = DependencyInjection.GetServices(Configuration);
 
             var container = services.BuildServiceProvider();
             var schedulerService = container.GetRequiredService<SchedulingService>();
             schedulerService.InitializeScheduler();
-            
+
 
             var host = BuildWebHost(args, services);
 
@@ -36,7 +45,13 @@ namespace IrriWeather.Web
 
         public static IWebHost BuildWebHost(string[] args, IServiceCollection services) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureServices((s) => s = services)
+                .ConfigureServices((s) =>
+                {
+                    foreach (var service in services)
+                    {
+                        s.Add(service);
+                    }
+                })
                 .UseStartup<Startup>()
                 .Build();
     }

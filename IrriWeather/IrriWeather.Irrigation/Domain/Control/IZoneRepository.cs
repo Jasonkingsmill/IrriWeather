@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IrriWeather.Irrigation.Domain.Control
 {
-    public interface IZoneRepository : IRepository<Zone, int>
+    public interface IZoneRepository : IRepository<Zone, Guid>
     {
     }
 }

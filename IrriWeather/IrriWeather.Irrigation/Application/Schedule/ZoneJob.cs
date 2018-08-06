@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IrriWeather.Irrigation.Application
+namespace IrriWeather.Irrigation.Application.Schedule
 {
     public class ZoneJob : IJob
     {

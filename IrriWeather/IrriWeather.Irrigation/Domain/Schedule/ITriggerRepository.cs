@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IrriWeather.Irrigation.Domain.Schedule
 {
-    public interface ITriggerRepository : IRepository<Trigger, int>
+    public interface ITriggerRepository : IRepository<Trigger, Guid>
     {
     }
 }

@@ -17,7 +17,7 @@ export class Zones extends React.Component<RouteComponentProps<{}>, {}> {
     }
 
     private loadZones() {
-        let repo = new ZoneRepository('');
+        let repo = new ZoneRepository();
         repo.getAll().then((data) => {
             this.setState({ zones: data });
         });

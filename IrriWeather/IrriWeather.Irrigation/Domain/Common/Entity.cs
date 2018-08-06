@@ -10,6 +10,6 @@ namespace IrriWeather.Irrigation.Domain.Common
         {
         }
 
-        public int Id { get; private set; }
+        public Guid Id { get; private set; }
     }
 }

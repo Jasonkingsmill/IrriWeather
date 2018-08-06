@@ -7,13 +7,14 @@ import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
 
 interface IZoneListProps {
     zones: ZoneApiModel[]
+    onAddZone: any
 }
 
 export class ZoneList extends React.Component<IZoneListProps, {}> {
     constructor(props: IZoneListProps) {
         super(props);
     }
-    
+
     public componentDidMount() {
         document.title = 'Zone List';
     }
@@ -26,7 +27,7 @@ export class ZoneList extends React.Component<IZoneListProps, {}> {
                         <div className="box">
                             <ZoneListBoxHeader />
                             <ZoneListBoxBody zones={this.props.zones} />
-                            <ZoneListBoxFooter />
+                            <ZoneListBoxFooter onAddZone={this.props.onAddZone} />
                         </div>
                     </div>
                 </div>

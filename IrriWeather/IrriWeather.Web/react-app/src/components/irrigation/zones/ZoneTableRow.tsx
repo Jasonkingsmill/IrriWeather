@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 interface IZoneTableRowProps {
-    id: number;
+    id: string;
     name: string;
     description: string;
     channel: number;
     isEnabled: boolean;
-    running: boolean;
+    isStarted: boolean;
 }
 
 export class ZoneTableRow extends React.Component<IZoneTableRowProps, {}> {
@@ -20,7 +20,7 @@ export class ZoneTableRow extends React.Component<IZoneTableRowProps, {}> {
                 <td>{this.props.description}</td>
                 <td>{this.props.channel}</td>
                 <td>{this.props.isEnabled.toString()}</td>
-                <td>{this.props.running ? 'OFF' : 'ON'}</td>
+                <td>{this.props.isStarted ? 'STARTED' : 'STOPPED'}</td>
                 <td><span className="btn btn-default" ><Link to={'/irrigation/zones/' + this.props.id}>Edit</Link></span></td>
             </tr>
             );

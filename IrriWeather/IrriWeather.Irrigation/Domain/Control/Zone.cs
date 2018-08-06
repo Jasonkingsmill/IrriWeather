@@ -18,5 +18,25 @@ namespace IrriWeather.Irrigation.Domain.Control
         public int Channel { get; private set; }
         public bool IsEnabled { get; private set; }
         
+        public bool IsRunning(IChannelControlService service)
+        {
+            return service.GetState(Channel);
+        }
+
+        public void SetNewChannel(IChannelControlService service, int newChannel)
+        {
+            service.SetState(Channel, false);
+            this.Channel = newChannel;
+        }
+
+        public void Run(IChannelControlService service)
+        {
+            service.SetState(Channel, true);
+        }
+
+        public void Stop(IChannelControlService service)
+        {
+            service.SetState(Channel, false);
+        }
     }
 }

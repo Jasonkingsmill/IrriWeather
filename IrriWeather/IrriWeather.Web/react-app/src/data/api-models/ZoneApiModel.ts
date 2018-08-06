@@ -1,11 +1,11 @@
 ﻿
 export class ZoneApiModel {
-    id: number;
+    id: string;
     name: string;
     description: string;
     channel: number;
     isEnabled: boolean;
-    running: boolean;
+    isStarted: boolean;
 }
 
 export default ZoneApiModel;

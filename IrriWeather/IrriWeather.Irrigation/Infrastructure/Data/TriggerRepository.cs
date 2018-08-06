@@ -22,7 +22,7 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
             context.SaveChanges();
         }
 
-        public Trigger Find(int id)
+        public Trigger Find(Guid id)
         {
             return context.Triggers.FirstOrDefault(x => x.Id == id);
         }

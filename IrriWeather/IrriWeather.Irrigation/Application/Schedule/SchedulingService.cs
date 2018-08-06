@@ -9,9 +9,8 @@ using Quartz.Impl;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using IrriWeather.Irrigation.Application.Schedule;
 
-namespace IrriWeather.Irrigation.Application
+namespace IrriWeather.Irrigation.Application.Schedule
 {
     public class SchedulingService
     {
@@ -26,12 +25,9 @@ namespace IrriWeather.Irrigation.Application
             this.scheduler = new StdSchedulerFactory().GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
             scheduler.JobFactory = jobFactory;
         }
-
-
-
+        
         public void InitializeScheduler()
         {
-
             var triggers = triggerRepository.FindAll();
             foreach (var trigger in triggers)
             {
@@ -61,5 +57,10 @@ namespace IrriWeather.Irrigation.Application
             scheduler.Start();
         }
 
+
+        public void Add()
+        {
+
+        }
     }
 }
