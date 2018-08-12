@@ -3,11 +3,12 @@ import { ZoneListBoxHeader } from './ZoneListBoxHeader';
 import { ZoneListBoxBody } from './ZoneListBoxBody';
 import { ZoneListBoxFooter } from './ZoneListBoxFooter';
 import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
+import Zone from 'src/data/Zone';
 
 
 interface IZoneListProps {
-    zones: ZoneApiModel[]
-    onAddZone: any
+    zones: Zone[]
+    onAddZoneClick: any
 }
 
 export class ZoneList extends React.Component<IZoneListProps, {}> {
@@ -27,7 +28,7 @@ export class ZoneList extends React.Component<IZoneListProps, {}> {
                         <div className="box">
                             <ZoneListBoxHeader />
                             <ZoneListBoxBody zones={this.props.zones} />
-                            <ZoneListBoxFooter onAddZone={this.props.onAddZone} />
+                            <ZoneListBoxFooter onAddZoneClick={this.props.onAddZoneClick} />
                         </div>
                     </div>
                 </div>

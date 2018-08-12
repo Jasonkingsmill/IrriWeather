@@ -26,7 +26,7 @@ export class ZoneRepository {
             let payload = await response.json();
 
             var zones = payload as ZoneApiModel[];
-            return payload;
+            return zones;
         } catch (error) {
             throw new Error('Failed to retrieve zone list'); 
         }

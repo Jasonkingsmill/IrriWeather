@@ -1,4 +1,5 @@
 ﻿using IrriWeather.IO;
+using IrriWeather.IO.Control.NativeEnums;
 using IrriWeather.Irrigation.Domain.Control;
 using System;
 using System.Collections.Generic;
@@ -9,23 +10,33 @@ namespace IrriWeather.Irrigation.Infrastructure.Control
 {
     public class ChannelControlService : IChannelControlService
     {
-        private readonly GpioService gpioService;
+        private readonly IGpioService gpioService;
 
-        public ChannelControlService(GpioService gpioService)
+        public ChannelControlService(IGpioService gpioService)
         {
             this.gpioService = gpioService;
         }
 
-        public void SetState(int zone, bool on)
+
+        public void Start(int channel)
         {
-            gpioService.
-            Board.Pins[zone].Value = on;
+            gpioService.Write(channel, true);
         }
 
-        public bool GetState(int zone)
+
+        public void Stop(int channel)
         {
-            return Board.Pins[zone].Value;
+            gpioService.Write(channel, false);
         }
 
+        public void Initialise(int channel)
+        {
+            gpioService.RegisterPinControl(channel, PinDirection.Output);
+        }
+
+        public bool IsStarted(int channel)
+        {
+            return gpioService.Read(channel);
+        }
     }
 }

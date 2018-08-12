@@ -1,5 +1,4 @@
 ﻿using IrriWeather.Irrigation.Domain;
-using Unosquare.PiGpio;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,13 +31,13 @@ namespace IrriWeather.Irrigation.Application.Control
         }
 
 
-        public void RunZone(Guid zoneId)
+        public void StartZone(Guid zoneId)
         {
             var zone = zoneRepository.Find(zoneId);
             if (zone == null)
                 throw new ArgumentNullException(nameof(zoneId), $"The zone '{zoneId}' does not exist");
 
-            zone.Run(controlService);
+            zone.Start(controlService);
         }
 
         public ZoneDto AddZone(AddZoneCommand cmd)

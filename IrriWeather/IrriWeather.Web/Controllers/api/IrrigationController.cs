@@ -14,7 +14,7 @@ namespace IrriWeather.Web.Controllers
     {
         private readonly ZoneService zoneService;
 
-        public  IrrigationController(ZoneService zoneService)
+        public IrrigationController(ZoneService zoneService)
         {
             this.zoneService = zoneService;
         }
@@ -61,6 +61,15 @@ namespace IrriWeather.Web.Controllers
                 IsEnabled = zone.IsEnabled,
                 Name = zone.Name
             };
+        }
+
+
+
+        [HttpGet("zones/{id:guid}/start")]
+        public void StartZone(Guid id)
+        {
+            zoneService.StartZone(id);
+
         }
 
     }

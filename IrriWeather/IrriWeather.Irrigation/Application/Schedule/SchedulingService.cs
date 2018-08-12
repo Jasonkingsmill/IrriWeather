@@ -1,6 +1,5 @@
 ﻿using IrriWeather.Irrigation.Domain.Control;
 using IrriWeather.Irrigation.Domain.Schedule;
-using Unosquare.PiGpio;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,12 +17,10 @@ namespace IrriWeather.Irrigation.Application.Schedule
         private readonly JobFactory jobFactory;
         private readonly IScheduler scheduler;
 
-        public SchedulingService(ITriggerRepository triggerRepository, JobFactory jobFactory)
+        public SchedulingService(ITriggerRepository triggerRepository, IScheduler scheduler)
         {
             this.triggerRepository = triggerRepository;
-            this.jobFactory = jobFactory;
-            this.scheduler = new StdSchedulerFactory().GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
-            scheduler.JobFactory = jobFactory;
+            this.scheduler = scheduler;
         }
         
         public void InitializeScheduler()
@@ -39,28 +36,71 @@ namespace IrriWeather.Irrigation.Application.Schedule
                 jobData.Add("zoneChannels", trigger.Zones.Select(x => x.Channel));
 
 
-                IJobDetail job = JobBuilder.Create<ZoneJob>()
+                IJobDetail jobDetail = JobBuilder.Create<ZoneJob>()
                     .WithIdentity($"trigger:{trigger.Id}", "zones")
                     .UsingJobData(new JobDataMap(jobData))
                     .Build();
 
                 ITrigger jobTrigger = TriggerBuilder.Create()
                     .WithIdentity($"trigger:{trigger.Id}", "zones")
-                    .ForJob(job)
+                    .ForJob(jobDetail)
                     .WithCronSchedule(trigger.BuildCronExpression())
                     .EndAt(trigger.EnabledUntil)
                     .Build();
 
-                scheduler.ScheduleJob(jobTrigger).ConfigureAwait(false).GetAwaiter().GetResult();
+                scheduler.ScheduleJob(jobDetail, jobTrigger).ConfigureAwait(false).GetAwaiter().GetResult();
             }
 
             scheduler.Start();
         }
 
 
-        public void Add()
+        public void Add(Trigger trigger)
         {
+            IDictionary<string, object> jobData = new Dictionary<string, object>();
+            jobData.Add("duration", trigger.Duration);
+            jobData.Add("zoneChannels", trigger.Zones.Select(x => x.Channel));
 
+
+            IJobDetail jobDetail = JobBuilder.Create<ZoneJob>()
+                .WithIdentity(BuildJobKey(trigger.Id))
+                .UsingJobData(new JobDataMap(jobData))
+                .Build();
+
+            ITrigger jobTrigger = TriggerBuilder.Create()
+                .WithIdentity(BuildTriggerKey(trigger.Id))
+                .ForJob(jobDetail)
+                .WithCronSchedule(trigger.BuildCronExpression())
+                .EndAt(trigger.EnabledUntil)
+                .Build();
+
+            scheduler.ScheduleJob(jobDetail, jobTrigger).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+
+        public void Remove(Trigger trigger)
+        {
+            var jobKey = BuildJobKey(trigger.Id);
+            var jobTrigger = BuildTriggerKey(trigger.Id);
+
+            scheduler.DeleteJob(jobKey);
+            scheduler.UnscheduleJob(jobTrigger);
+        }
+
+        
+
+
+
+
+        private TriggerKey BuildTriggerKey(Guid triggerId)
+        {
+            return new TriggerKey($"trigger:{triggerId}", "zones");
+        }
+
+
+        private JobKey BuildJobKey(Guid triggerId)
+        {
+            return new JobKey($"trigger:{triggerId}", "zones");
         }
     }
 }

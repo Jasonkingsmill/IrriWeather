@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-interface AddZoneDialogProps {
+export interface IAddZoneDialogProps {
     visible: boolean;
     handleSubmit: any;
     pristine: boolean;
@@ -10,7 +10,7 @@ interface AddZoneDialogProps {
     closeDialog: any;
 }
 
-let AddZoneDialog: any = (props: AddZoneDialogProps) => {
+let AddZoneDialog: any = (props: IAddZoneDialogProps) => {
     return (
         <div className='box'>
             <Modal bsSize='large' show={props.visible} onHide={props.closeDialog} >

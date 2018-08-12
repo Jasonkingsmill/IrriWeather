@@ -6,7 +6,9 @@ namespace IrriWeather.Irrigation.Domain.Control
 {
     public interface IChannelControlService
     {
-        bool GetState(int channel);
-        void SetState(int channel, bool on);
+        bool IsStarted(int channel);
+        void Start(int channel);
+        void Stop(int channel);
+        void Initialise(int channel);
     }
 }

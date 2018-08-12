@@ -33,9 +33,11 @@ namespace IrriWeather.Web
             var services = DependencyInjection.GetServices(Configuration);
 
             var container = services.BuildServiceProvider();
-            var schedulerService = container.GetRequiredService<SchedulingService>();
-            schedulerService.InitializeScheduler();
-
+            using (var scope = container.CreateScope())
+            {
+                var schedulerService = container.GetRequiredService<SchedulingService>();
+                schedulerService.InitializeScheduler();
+            }
 
             var host = BuildWebHost(args, services);
 
