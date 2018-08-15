@@ -9,12 +9,25 @@ namespace IrriWeather.IO
 {
     public class RaspberryPiEmulationGpioService : IGpioService
     {
-
+        private static object _lock = new object();
         private static List<int> _allocatedPins = new List<int>();
 
-        private static Dictionary<int, MockGpio> _pins = new Dictionary<int, MockGpio>();
+        private static Dictionary<int, MockGpio> _pins;
 
-
+        public RaspberryPiEmulationGpioService()
+        {
+            lock (_lock)
+            {
+                if (_pins == null)
+                {
+                    _pins = new Dictionary<int, MockGpio>();
+                    for (int i = 0; i < 32; i++)
+                    {
+                        RegisterPinControl(i, PinDirection.Input);
+                    }
+                }
+            }
+        }
 
         public IEnumerable<int> AllocatedPins { get => _allocatedPins; }
 
@@ -34,20 +47,29 @@ namespace IrriWeather.IO
                 _pins.Add(pin, new MockGpio((SystemGpio)pin));
             }
 
-            if (!IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} is already registered", nameof(pin));
+            //if (!IsFreePin(pin))
+            //    throw new ArgumentException($"Pin {pin} is already registered", nameof(pin));
 
             var gpio = _pins[pin];
 
             gpio.Direction = pinDirection;
         }
 
+        public void UnregisterPinControl(int pin)
+        {
+            if (!_pins.Any(x => x.Key == pin))
+            {
+                _pins.Remove(pin);
+            }
+            ClearPinInterruptCallback(pin);
+        }
+
 
 
         public void RegisterPinInterruptCallback(int pin, Action<int, LevelChange, uint> callback, EdgeDetection edgeDetection)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
+            //if (IsFreePin(pin))
+            //    throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
 
             
         }
@@ -56,8 +78,8 @@ namespace IrriWeather.IO
 
         public void ClearPinInterruptCallback(int pin)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
+            //if (IsFreePin(pin))
+            //    throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
 
 
         }
@@ -67,8 +89,8 @@ namespace IrriWeather.IO
 
         public void Write(int pin, bool state)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
+            //if (IsFreePin(pin))
+            //    throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
 
             var gpio = _pins[pin];
 
@@ -82,12 +104,12 @@ namespace IrriWeather.IO
 
         public bool Read(int pin)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
+            //if (IsFreePin(pin))
+            //    throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
 
             var gpio = _pins[pin];
-            if (gpio.Mode != PinMode.Input)
-                throw new ArgumentException($"Pin {pin} mode must first be set to input mode before attempting to read pin", nameof(pin));
+            //if (gpio.Mode != PinMode.Input)
+            //    throw new ArgumentException($"Pin {pin} mode must first be set to input mode before attempting to read pin", nameof(pin));
 
             return gpio.Value;
         }
@@ -99,6 +121,7 @@ namespace IrriWeather.IO
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
+     
 
         protected virtual void Dispose(bool disposing)
         {
@@ -130,6 +153,8 @@ namespace IrriWeather.IO
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+
+
         #endregion
     }
 }

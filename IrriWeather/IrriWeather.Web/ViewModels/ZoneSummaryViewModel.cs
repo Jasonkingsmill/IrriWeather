@@ -12,5 +12,6 @@ namespace IrriWeather.Web.ViewModels
         public string Description { get; set; }
         public int Channel { get; set; }
         public bool IsEnabled { get; set; }
+        public bool IsStarted { get; set; }
     }
 }

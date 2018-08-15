@@ -21,30 +21,30 @@ namespace IrriWeather.Irrigation.Application.Control
         public IEnumerable<ZoneDto> GetZones()
         {
             var zones = zoneRepository.FindAll();
-            return zones.Select(zone => new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled));
+            var models = new List<ZoneDto>();
+            foreach(var zone in zones)
+            {
+                var isStarted = controlService.IsStarted(zone.Channel);
+                models.Add(new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled, isStarted));
+            }
+            return models;
         }
 
         public ZoneDto GetZone(Guid id)
         {
             var zone = zoneRepository.Find(id);
-            return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled);
+            return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled, controlService.IsStarted(zone.Channel));
         }
 
 
-        public void StartZone(Guid zoneId)
-        {
-            var zone = zoneRepository.Find(zoneId);
-            if (zone == null)
-                throw new ArgumentNullException(nameof(zoneId), $"The zone '{zoneId}' does not exist");
 
-            zone.Start(controlService);
-        }
 
         public ZoneDto AddZone(AddZoneCommand cmd)
         {
             var zone = new Zone(cmd.Name, cmd.Description, cmd.Channel, cmd.IsEnabled);
             zoneRepository.Add(zone);
-            return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled);
+            controlService.Register(zone.Channel);
+            return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled, controlService.IsStarted(zone.Channel));
         }
 
         public void RemoveZone(RemoveZoneCommand cmd)
@@ -53,6 +53,15 @@ namespace IrriWeather.Irrigation.Application.Control
             if (zone == null)
                 throw new ArgumentException($"A zone with id '{cmd.Id}' does not exist");
             zoneRepository.Remove(zone);
+        }
+
+        public void StartZone(Guid zoneId)
+        {
+            var zone = zoneRepository.Find(zoneId);
+            if (zone == null)
+                throw new ArgumentNullException(nameof(zoneId), $"The zone '{zoneId}' does not exist");
+
+            zone.Start(controlService);
         }
 
         public void StopZone(Guid zoneId)

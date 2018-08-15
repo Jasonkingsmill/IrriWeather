@@ -1,4 +1,5 @@
 ﻿import ZoneApiModel from './api-models/ZoneApiModel';
+import AddZoneApiModel from 'src/data/api-models/AddZoneApiModel';
 
 
 export class ZoneRepository {
@@ -32,20 +33,38 @@ export class ZoneRepository {
         }
     }
 
-    public async getById(id: number): Promise<ZoneApiModel | null> {
-        if (id == undefined) { 
-            console.log('Client ID must be valid');
-            return null;
+    public async getById(id: string): Promise<ZoneApiModel | null> {
+        try {
+            let response = await fetch(this.baseUrl + "/" + id);
+            if (!response.ok)
+                throw new DOMException(`Error fetching zones: ${response.statusText}`);
+            let payload = await response.json();
+
+            var zone = payload as ZoneApiModel;
+            return zone;
+        } catch (error) {
+            throw new Error('Failed to retrieve zone list');
         }
+    }
 
-        //let dto = await this.fetchClientDetails(id);
-        //if (dto == undefined)
-        //    throw new Error('Client not found');
 
-        //let client = DataMapper.mapClientApiModelToClient(dto);
+    public async add(zone: AddZoneApiModel): Promise<ZoneApiModel | null> {
 
-        let client = {} as ZoneApiModel;
-        return client;
+        let response = await fetch(this.baseUrl, {
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(zone),
+        }, );
+
+        if (!response.ok)
+            throw new DOMException(`Error fetching zones: ${response.statusText}`);
+
+        let payload = await response.json();
+
+        return payload as ZoneApiModel;
     }
 
 }

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IrriWeather.Common\IrriWeather.Common.csproj" />
     <ProjectReference Include="..\IrriWeather.IO\IrriWeather.IO.csproj" />
   </ItemGroup>
 

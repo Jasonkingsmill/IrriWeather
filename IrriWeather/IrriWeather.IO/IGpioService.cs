@@ -13,6 +13,7 @@ namespace IrriWeather.IO
         bool IsFreePin(int pin);
         bool Read(int pin);
         void RegisterPinControl(int pin, PinDirection mode);
+        void UnregisterPinControl(int pin);
         void RegisterPinInterruptCallback(int pin, Action<int, LevelChange, uint> callback, EdgeDetection edgeDetection);
         void Write(int pin, bool state);
     }

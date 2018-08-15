@@ -9,6 +9,7 @@ namespace IrriWeather.Irrigation.Domain.Control
         bool IsStarted(int channel);
         void Start(int channel);
         void Stop(int channel);
-        void Initialise(int channel);
+        void Register(int channel);
+        void Unregister(int channel);
     }
 }

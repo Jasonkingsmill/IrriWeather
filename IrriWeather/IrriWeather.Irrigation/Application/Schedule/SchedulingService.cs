@@ -1,20 +1,17 @@
-﻿using IrriWeather.Irrigation.Domain.Control;
-using IrriWeather.Irrigation.Domain.Schedule;
+﻿using IrriWeather.Irrigation.Domain.Schedule;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Quartz;
-using Quartz.Impl;
 using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace IrriWeather.Irrigation.Application.Schedule
 {
     public class SchedulingService
     {
         private readonly ITriggerRepository triggerRepository;
-        private readonly JobFactory jobFactory;
         private readonly IScheduler scheduler;
 
         public SchedulingService(ITriggerRepository triggerRepository, IScheduler scheduler)

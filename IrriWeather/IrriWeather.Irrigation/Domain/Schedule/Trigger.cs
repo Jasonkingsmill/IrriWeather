@@ -1,9 +1,9 @@
-﻿using IrriWeather.Irrigation.Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using IrriWeather.Irrigation.Domain.Control;
+using IrriWeather.Common.Domain;
 
 namespace IrriWeather.Irrigation.Domain.Schedule
 {

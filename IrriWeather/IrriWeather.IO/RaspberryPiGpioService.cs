@@ -38,6 +38,14 @@ namespace IrriWeather.IO
             gpio.Direction = pinDirection;
         }
 
+        public void UnregisterPinControl(int pin)
+        {
+            var gpio = Board.Pins[pin];
+
+            gpio.Direction =  PinDirection.Input;
+            ClearPinInterruptCallback(pin);
+        }
+
 
 
         public void RegisterPinInterruptCallback(int pin, Action<int, LevelChange, uint> callback, EdgeDetection edgeDetection)

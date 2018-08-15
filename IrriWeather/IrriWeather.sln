@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Weather", "Irri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.Web", "IrriWeather.Web\IrriWeather.Web.csproj", "{CCA6237B-904B-48DE-9FCC-815EABB771A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrriWeather.IO", "IrriWeather.IO\IrriWeather.IO.csproj", "{B58C0DDC-DD65-42C6-9636-3C68AABA452D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IrriWeather.IO", "IrriWeather.IO\IrriWeather.IO.csproj", "{B58C0DDC-DD65-42C6-9636-3C68AABA452D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrriWeather.Common", "IrriWeather.Common\IrriWeather.Common.csproj", "{D9625708-2C32-44BC-AB36-2C8CAE3CEC01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B58C0DDC-DD65-42C6-9636-3C68AABA452D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58C0DDC-DD65-42C6-9636-3C68AABA452D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58C0DDC-DD65-42C6-9636-3C68AABA452D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9625708-2C32-44BC-AB36-2C8CAE3CEC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9625708-2C32-44BC-AB36-2C8CAE3CEC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9625708-2C32-44BC-AB36-2C8CAE3CEC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9625708-2C32-44BC-AB36-2C8CAE3CEC01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

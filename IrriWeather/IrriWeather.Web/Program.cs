@@ -12,6 +12,7 @@ using IrriWeather.Irrigation.Application.Schedule;
 using Quartz;
 using Quartz.Impl;
 using IrriWeather.Irrigation.Application;
+using IrriWeather.Irrigation.Domain.Control;
 
 namespace IrriWeather.Web
 {
@@ -37,6 +38,14 @@ namespace IrriWeather.Web
             {
                 var schedulerService = container.GetRequiredService<SchedulingService>();
                 schedulerService.InitializeScheduler();
+
+                var zoneRepo = container.GetService<IZoneRepository>();
+                var channelService = container.GetService<IChannelControlService>();
+                var zones = zoneRepo.FindAll();
+                foreach(var zone in zones)
+                {
+                    channelService.Register(zone.Channel);
+                }
             }
 
             var host = BuildWebHost(args, services);

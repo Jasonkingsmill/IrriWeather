@@ -1,11 +1,12 @@
 ﻿import * as React from 'react';
-import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
 import { ZoneTableHeader } from './ZoneTableHeader';
 import { ZoneTableRow } from './ZoneTableRow';
 import { ZoneTableFooter } from './ZoneTableFooter';
+import Zone from 'src/data/Zone';
 
 interface IZoneListProps {
-    zones: ZoneApiModel[]
+    zones: Zone[];
+    onStartStopClick: any;
 }
 
 export const ZoneListBoxBody = (props: IZoneListProps) => {
@@ -16,7 +17,7 @@ export const ZoneListBoxBody = (props: IZoneListProps) => {
                     <ZoneTableHeader />
                     {
                         props.zones.map((zone) =>
-                            <ZoneTableRow {...zone} />
+                            <ZoneTableRow {...zone} onStartStopClick={(e: any, id: string) => props.onStartStopClick(e,id)} />
                     )}
                     <ZoneTableFooter />
                 </tbody>

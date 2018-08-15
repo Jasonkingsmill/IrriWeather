@@ -8,9 +8,14 @@ export interface IAddZoneDialogProps {
     reset: any;
     submitting: boolean;
     closeDialog: any;
+    handleOnChange: any;
+    zoneName: string;
+    zoneDescription: string;
+    zoneChannel: string;
+    zoneEnabled: boolean;
 }
 
-let AddZoneDialog: any = (props: IAddZoneDialogProps) => {
+export let AddZoneDialog: any = (props: IAddZoneDialogProps) => {
     return (
         <div className='box'>
             <Modal bsSize='large' show={props.visible} onHide={props.closeDialog} >
@@ -25,34 +30,54 @@ let AddZoneDialog: any = (props: IAddZoneDialogProps) => {
                                 <input
                                     name="zoneName"
                                     type="text"
-                                    placeholder="Client"
+                                    placeholder="Enter zone name"
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={props.zoneName}
                                 />
                             </div> 
                         </div>
                         <div className='form-group' >
-                            <label htmlFor='description' className='col-sm-4 control-label'>Description</label>
+                            <label htmlFor='zoneDescription' className='col-sm-4 control-label'>Description</label>
                             <div>
                                 <input
-                                    name="description"
+                                    name="zoneDescription"
                                     type="text"
-                                    placeholder="Description"
+                                    placeholder="Enter a description"
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={props.zoneDescription}
                                 />
                             </div>
                         </div>
                         <div className='form-group' >
-                            <label htmlFor='channel' className='col-sm-4 control-label'>Channel Number</label>
+                            <label htmlFor='zoneChannel' className='col-sm-4 control-label'>Channel</label>
                             <div>
                                 <input
-                                    name="channel"
+                                    name="zoneChannel"
                                     type="number"
-                                    placeholder="0-31"
+                                    placeholder="Channel No. between 0-31"
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={props.zoneChannel}
+                                />
+                            </div>
+                        </div>
+                        <div className='form-group' >
+                            <label htmlFor='zoneEnabled' className='col-sm-4 control-label'>Enabled</label>
+                            <div>
+                                <input
+                                    name="zoneEnabled"
+                                    type="checkbox"
+                                    onChange={props.handleOnChange}
+                                    checked={props.zoneEnabled}
                                 />
                             </div>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-default pull-left" type='button' onClick={props.closeDialog}>Close</button>
-                        <button className="btn btn-primary" type='submit' disabled={props.pristine || props.submitting}>Save</button>
+                        <button className="btn btn-primary" type='submit' >Save</button>
                     </Modal.Footer>
                 </form>
             </Modal>
@@ -63,3 +88,4 @@ let AddZoneDialog: any = (props: IAddZoneDialogProps) => {
 export default AddZoneDialog;
 
 
+//disabled={props.pristine || props.submitting}

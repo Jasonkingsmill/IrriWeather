@@ -157,7 +157,7 @@ namespace IrriWeather.IO.Emulator
         /// <returns>The result code. 0 (OK) for success.</returns>
         public void Write(int value)
         {
-            Value = (value == 0);
+            Value = (value != 0);
         }
     }
 }

@@ -29,9 +29,14 @@ namespace IrriWeather.Irrigation.Infrastructure.Control
             gpioService.Write(channel, false);
         }
 
-        public void Initialise(int channel)
+        public void Register(int channel)
         {
             gpioService.RegisterPinControl(channel, PinDirection.Output);
+        }
+
+        public void Unregister(int channel)
+        {
+            gpioService.UnregisterPinControl(channel);
         }
 
         public bool IsStarted(int channel)

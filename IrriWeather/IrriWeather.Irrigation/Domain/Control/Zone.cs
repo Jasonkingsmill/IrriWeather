@@ -1,12 +1,19 @@
-﻿using IrriWeather.Irrigation.Domain.Common;
+﻿using IrriWeather.Common.Domain;
 using System;
 
 namespace IrriWeather.Irrigation.Domain.Control
 {
     public class Zone : Entity
     {
+        private Zone() { }
+
         public Zone(string name, string description, int channel, bool isEnabled)
         {
+            if (String.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name must be specified", nameof(name));
+            if (String.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Description must be specified", nameof(description));
+            
             Name = name;
             Description = description;
             Channel = channel;

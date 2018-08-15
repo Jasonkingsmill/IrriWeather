@@ -25,15 +25,18 @@ namespace IrriWeather.Web.Controllers
             var zones = zoneService.GetZones();
             return zones.Select(zone => new ZoneSummaryViewModel()
             {
+                Id = zone.Id,
                 Channel = zone.Channel,
                 Description = zone.Description,
                 IsEnabled = zone.IsEnabled,
-                Name = zone.Name
+                Name = zone.Name,
+                IsStarted = zone.IsStarted
+
             });
         }
 
         [HttpPost("zones")]
-        public IActionResult AddZone(AddZoneViewModel model)
+        public IActionResult AddZone([FromBody]AddZoneViewModel model)
         {
             var cmd = new AddZoneCommand(model.Name, model.Description, model.Channel, model.IsEnabled);
             var zone = zoneService.AddZone(cmd);
@@ -59,16 +62,25 @@ namespace IrriWeather.Web.Controllers
                 Channel = zone.Channel,
                 Description = zone.Description,
                 IsEnabled = zone.IsEnabled,
-                Name = zone.Name
+                Name = zone.Name,
+                IsStarted = zone.IsStarted
             };
         }
 
 
 
-        [HttpGet("zones/{id:guid}/start")]
+        [HttpPost("zones/{id:guid}/start")]
         public void StartZone(Guid id)
         {
             zoneService.StartZone(id);
+
+        }
+
+
+        [HttpPost("zones/{id:guid}/stop")]
+        public void StopZone(Guid id)
+        {
+            zoneService.StopZone(id);
 
         }
 

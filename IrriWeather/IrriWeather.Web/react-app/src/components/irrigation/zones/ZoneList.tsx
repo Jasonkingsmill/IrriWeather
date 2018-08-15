@@ -9,6 +9,7 @@ import Zone from 'src/data/Zone';
 interface IZoneListProps {
     zones: Zone[]
     onAddZoneClick: any
+    onStartStopClick: any
 }
 
 export class ZoneList extends React.Component<IZoneListProps, {}> {
@@ -27,7 +28,7 @@ export class ZoneList extends React.Component<IZoneListProps, {}> {
                     <div className="col-xs-12">
                         <div className="box">
                             <ZoneListBoxHeader />
-                            <ZoneListBoxBody zones={this.props.zones} />
+                            <ZoneListBoxBody zones={this.props.zones} onStartStopClick={(e: any, id: string) => this.props.onStartStopClick(e,id)} />
                             <ZoneListBoxFooter onAddZoneClick={this.props.onAddZoneClick} />
                         </div>
                     </div>
