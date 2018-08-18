@@ -23,24 +23,14 @@ namespace IrriWeather.IO
                     _pins = new Dictionary<int, MockGpio>();
                     for (int i = 0; i < 32; i++)
                     {
-                        RegisterPinControl(i, PinDirection.Input);
+                        RegisterPinControl(i, PinMode.Input);
                     }
                 }
             }
         }
 
-        public IEnumerable<int> AllocatedPins { get => _allocatedPins; }
 
-
-        public bool IsFreePin(int pin)
-        {
-            return AllocatedPins.Any(a => a == pin);
-        }
-
-
-
-
-        public void RegisterPinControl(int pin, PinDirection pinDirection)
+        public void RegisterPinControl(int pin, PinMode pinMode)
         {
             if (!_pins.Any(x => x.Key == pin))
             {
@@ -52,7 +42,7 @@ namespace IrriWeather.IO
 
             var gpio = _pins[pin];
 
-            gpio.Direction = pinDirection;
+            gpio.Direction = pinMode;
         }
 
         public void UnregisterPinControl(int pin)

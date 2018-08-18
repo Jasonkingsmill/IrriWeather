@@ -28,7 +28,7 @@
                 Setup.GpioCfgSetInternals((ConfigFlags)config);
 
                 var initResultCode = Setup.GpioInitialise();
-                IsAvailable = initResultCode == ResultCode.Ok;
+                IsAvailable = initResultCode >= ResultCode.Ok;
 
                 // You will need to compile libgpio.h adding
                 // #define EMBEDDED_IN_VM

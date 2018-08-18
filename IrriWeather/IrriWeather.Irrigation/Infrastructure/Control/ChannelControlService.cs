@@ -31,7 +31,7 @@ namespace IrriWeather.Irrigation.Infrastructure.Control
 
         public void Register(int channel)
         {
-            gpioService.RegisterPinControl(channel, PinDirection.Output);
+            gpioService.RegisterPinControl(channel, PinMode.Output);
         }
 
         public void Unregister(int channel)

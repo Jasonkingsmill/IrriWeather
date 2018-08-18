@@ -24,7 +24,22 @@ namespace IrriWeather.Irrigation.Domain.Control
         public string Description { get; private set; }
         public int Channel { get; private set; }
         public bool IsEnabled { get; private set; }
-        
+
+
+
+        public void ChangeName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name must not be empty", nameof(name));
+            this.Name = name;
+        }
+
+        public void ChangeDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Name must not be empty", nameof(description));
+            this.Description = description;
+        }
 
 
         public void SetNewChannel(IChannelControlService service, int newChannel)
@@ -32,6 +47,9 @@ namespace IrriWeather.Irrigation.Domain.Control
             service.Stop(Channel);
             this.Channel = newChannel;
         }
+
+
+
 
         public void Start(IChannelControlService service)
         {
@@ -46,6 +64,15 @@ namespace IrriWeather.Irrigation.Domain.Control
         public bool IsStarted(IChannelControlService service)
         {
             return service.IsStarted(Channel);
+        }
+
+        public void SetEnablement(IChannelControlService service, bool isEnabled)
+        {
+            if (!isEnabled)
+            {
+                service.Stop(Channel);
+            }
+            this.IsEnabled = isEnabled;
         }
     }
 }

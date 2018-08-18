@@ -42,7 +42,7 @@ namespace IrriWeather.Web
                 var zoneRepo = container.GetService<IZoneRepository>();
                 var channelService = container.GetService<IChannelControlService>();
                 var zones = zoneRepo.FindAll();
-                foreach(var zone in zones)
+                foreach (var zone in zones)
                 {
                     channelService.Register(zone.Channel);
                 }
@@ -63,6 +63,7 @@ namespace IrriWeather.Web
                         s.Add(service);
                     }
                 })
+                .UseUrls("http://*:5000")
                 .UseStartup<Startup>()
                 .Build();
     }

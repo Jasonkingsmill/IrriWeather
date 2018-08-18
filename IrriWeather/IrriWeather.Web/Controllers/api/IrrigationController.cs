@@ -35,6 +35,23 @@ namespace IrriWeather.Web.Controllers
             });
         }
 
+
+        [HttpGet("zones/{id:guid}")]
+        public ZoneSummaryViewModel GetZone(Guid id)
+        {
+            var zone = zoneService.GetZone(id);
+            return new ZoneSummaryViewModel()
+            {
+                Id = zone.Id,
+                Channel = zone.Channel,
+                Description = zone.Description,
+                IsEnabled = zone.IsEnabled,
+                Name = zone.Name,
+                IsStarted = zone.IsStarted
+            };
+        }
+
+
         [HttpPost("zones")]
         public IActionResult AddZone([FromBody]AddZoneViewModel model)
         {
@@ -52,20 +69,33 @@ namespace IrriWeather.Web.Controllers
         }
 
 
-        [HttpGet("zones/{id:guid}")]
-        public ZoneSummaryViewModel GetZone(Guid id)
+        [HttpPut("zones/{id:guid}")]
+        public IActionResult UpdateZone(Guid id, [FromBody]UpdateZoneViewModel model)
         {
-            var zone = zoneService.GetZone(id);
-            return new ZoneSummaryViewModel()
+            var cmd = new UpdateZoneCommand(id, model.Name, model.Description, model.Channel, model.IsEnabled);
+            var zone = zoneService.UpdateZone(cmd);
+            var newZone = new ZoneSummaryViewModel()
             {
                 Id = zone.Id,
                 Channel = zone.Channel,
                 Description = zone.Description,
                 IsEnabled = zone.IsEnabled,
-                Name = zone.Name,
-                IsStarted = zone.IsStarted
+                Name = zone.Name
             };
+            return Created(newZone.Id.ToString(), newZone);
         }
+
+
+        [HttpDelete("zones/{id:guid}")]
+        public IActionResult RemoveZone(Guid id)
+        {
+            var cmd = new RemoveZoneCommand(id);
+            zoneService.RemoveZone(cmd);
+            return Ok();
+        }
+
+
+
 
 
 

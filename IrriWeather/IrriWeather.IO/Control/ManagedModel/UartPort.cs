@@ -54,7 +54,7 @@
             if (result >= 0)
                 return (byte)result;
 
-            return default;
+            return default(byte?);
         }
 
         /// <summary>

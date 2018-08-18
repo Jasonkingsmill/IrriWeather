@@ -55,6 +55,19 @@ namespace IrriWeather.Irrigation.Application.Control
             zoneRepository.Remove(zone);
         }
 
+
+        public ZoneDto UpdateZone(UpdateZoneCommand cmd)
+        {
+            var zone = zoneRepository.Find(cmd.Id);
+            if (zone == null)
+                throw new ArgumentException($"A zone with id '{cmd.Id}' does not exist");
+            zone.ChangeName(cmd.Name);
+            zone.ChangeDescription(cmd.Description);
+            zone.SetNewChannel(controlService, cmd.Channel);
+            zone.SetEnablement(controlService, cmd.IsEnabled);
+            return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled, controlService.IsStarted(zone.Channel));
+        }
+
         public void StartZone(Guid zoneId)
         {
             var zone = zoneRepository.Find(zoneId);

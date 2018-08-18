@@ -75,12 +75,12 @@ namespace IrriWeather.IO.Emulator
         /// The direction.
         /// </value>
         /// <exception cref="InvalidOperationException">Unable to set the pin mode to an alternative function.</exception>
-        public PinDirection Direction { get; set; } = PinDirection.Input;
+        public PinMode Direction { get; set; } = PinMode.Input;
 
         /// <summary>
         /// Gets the current pin mode.
         /// </summary>
-        public PinMode Mode => Direction == PinDirection.Input ? PinMode.Input : PinMode.Output;
+        public PinMode Mode => Direction;
 
         /// <summary>
         /// Gets or sets the digital value of the pin.

@@ -37,8 +37,8 @@ namespace IrriWeather.Web
             services.AddTransient<IZoneRepository, ZoneRepository>();
             services.AddScoped<IChannelControlService, ChannelControlService>();
 
-            services.AddTransient<RaspberryPiGpioService>();
-            services.AddTransient<RaspberryPiEmulationGpioService>();
+            services.AddSingleton<RaspberryPiGpioService>();
+            services.AddSingleton<RaspberryPiEmulationGpioService>();
             services.AddScoped<IGpioService>(x =>
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

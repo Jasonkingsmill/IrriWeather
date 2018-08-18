@@ -1,48 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using IrriWeather.IO.Control;
 using IrriWeather.IO.Control.NativeEnums;
+using Pi = IrriWeather.IO.Control.NativeMethods;
 using IrriWeather.IO.Control.NativeTypes;
+using IrriWeather.IO.Control.NativeMethods;
 
 namespace IrriWeather.IO
 {
     public class RaspberryPiGpioService : IDisposable, IGpioService
     {
-        private List<int> _allocatedPins = new List<int>();
+        private static object _lock = new object();
+
+        private static bool _initialized = false;
+
 
         public RaspberryPiGpioService()
         {
+            lock (_lock)
+            {
+                if (!_initialized)
+                {
+                    //Retrieve internal configuration
+                    var config = (int)Setup.GpioCfgGetInternals();
+
+                    //config = config.ApplyBits(false, 3, 2, 1, 0); // Clear debug flags
+                    //             config = config | (int) ConfigFlags.NoSignalHandler;
+                    Setup.GpioCfgSetInternals((ConfigFlags)config);
+                    var initResultCode = Setup.GpioInitialise();
+                    _initialized = initResultCode >= ResultCode.Ok;
+                }
+            }
         }
 
 
 
-        public IEnumerable<int> AllocatedPins { get => this._allocatedPins; }
-
-
-        public bool IsFreePin(int pin)
+        public void RegisterPinControl(int pin, PinMode pinMode)
         {
-            return AllocatedPins.Any(a => a == pin);
-        }
-
-
-
-
-        public void RegisterPinControl(int pin, PinDirection pinDirection)
-        {
-            if (!IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} is already registered", nameof(pin));
-
-            var gpio = Board.Pins[pin];
-
-            gpio.Direction = pinDirection;
+            var gpio = (SystemGpio)pin;
+            Pi.IO.GpioSetMode(gpio, pinMode);
         }
 
         public void UnregisterPinControl(int pin)
         {
-            var gpio = Board.Pins[pin];
+            var gpio = (SystemGpio)pin;
 
-            gpio.Direction =  PinDirection.Input;
+            Pi.IO.GpioSetMode(gpio, PinMode.Input);
             ClearPinInterruptCallback(pin);
         }
 
@@ -50,34 +55,20 @@ namespace IrriWeather.IO
 
         public void RegisterPinInterruptCallback(int pin, Action<int, LevelChange, uint> callback, EdgeDetection edgeDetection)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
-
-
-            var gpio = Board.Pins[pin];
-
-            if (gpio.Mode != PinMode.Input)
-                throw new ArgumentException($"Pin {pin} mode must first be set to input before registering interrups", nameof(pin));
-
+            var gpio = (SystemGpio)pin;
 
             PiGpioIsrDelegate cb = new PiGpioIsrDelegate((gpioPin, levelChange, time) =>
             {
                 callback((int)gpioPin, (LevelChange)levelChange, time);
             });
-            gpio.Interrupts.Start(cb, (EdgeDetection)edgeDetection, 0);
+           Pi.IO.GpioSetIsrFunc(gpio,(EdgeDetection)edgeDetection, 0, cb);
 
         }
-
-
-
+               
         public void ClearPinInterruptCallback(int pin)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
-
-            var gpio = Board.Pins[pin];
-            gpio.Interrupts.Stop();
-
+            var gpio = (SystemGpio)pin;
+            Pi.IO.GpioSetIsrFunc(gpio, EdgeDetection.EitherEdge, 0, null);
         }
 
 
@@ -85,33 +76,30 @@ namespace IrriWeather.IO
 
         public void Write(int pin, bool state)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
+            if (!CanWrite(pin))
+                throw new Exception($"Cannot write to pin {pin}. Writeable pings are 0 - 31");
 
-            var gpio = Board.Pins[pin];
+            var gpio = (SystemGpio)pin;
+            Pi.IO.GpioWrite(gpio, state);
 
-            if (gpio.Mode != PinMode.Output)
-                throw new ArgumentException($"Pin {pin} mode must first be set to output mode before attempting to write to pin", nameof(pin));
-
-            gpio.Write(state ? 1 : 0);
         }
 
 
 
         public bool Read(int pin)
         {
-            if (IsFreePin(pin))
-                throw new ArgumentException($"Pin {pin} has not been registered", nameof(pin));
-
-            var gpio = Board.Pins[pin];
-            if (gpio.Mode != PinMode.Input)
-                throw new ArgumentException($"Pin {pin} mode must first be set to input mode before attempting to read pin", nameof(pin));
-
-            return gpio.Value;
+            var gpio = (SystemGpio)pin;
+            return Pi.IO.GpioRead(gpio);
         }
 
 
 
+
+
+        private bool CanWrite(int pin)
+        {
+            return pin > 0 && pin <= 31;
+        }
 
 
         #region IDisposable Support
@@ -124,7 +112,7 @@ namespace IrriWeather.IO
             {
                 if (disposing)
                 {
-                    Board.Release();
+                    //Board.Release();
                     // TODO: dispose managed state (managed objects).
                 }
 
