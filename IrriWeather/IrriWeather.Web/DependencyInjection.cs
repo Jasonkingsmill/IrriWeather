@@ -32,10 +32,10 @@ namespace IrriWeather.Web
             services.AddScoped<IrrigationContext>(x => new IrrigationContext(configuration.GetConnectionString("Irrigation")));
 
             services.AddTransient<ZoneService>();
-            services.AddTransient<IChannelControlService, ChannelControlService>();
+            services.AddTransient<IZoneControlService, ZoneControlService>();
             services.AddTransient<ITriggerRepository, TriggerRepository>();
             services.AddTransient<IZoneRepository, ZoneRepository>();
-            services.AddScoped<IChannelControlService, ChannelControlService>();
+            services.AddScoped<IZoneControlService, ZoneControlService>();
 
             services.AddSingleton<RaspberryPiGpioService>();
             services.AddSingleton<RaspberryPiEmulationGpioService>();

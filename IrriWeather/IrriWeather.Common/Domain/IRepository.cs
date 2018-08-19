@@ -12,6 +12,7 @@ namespace IrriWeather.Common.Domain
     {
         void Add(TEntity entity);
         void Remove(TEntity entity);
+        void Update(TEntity entity);
 
         TEntity Find(TKey id);
         IEnumerable<TEntity> FindAll();

@@ -22,6 +22,12 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
             context.SaveChanges();
         }
 
+        public void Update(Zone entity)
+        {
+            context.Update(entity);                        
+            context.SaveChanges();
+        }
+
         public Zone Find(Guid id)
         {
             return context.Zones.FirstOrDefault(x => x.Id == id);

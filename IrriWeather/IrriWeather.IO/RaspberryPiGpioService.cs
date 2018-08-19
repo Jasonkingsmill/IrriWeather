@@ -15,7 +15,7 @@ namespace IrriWeather.IO
         private static object _lock = new object();
 
         private static bool _initialized = false;
-
+        
 
         public RaspberryPiGpioService()
         {
@@ -23,11 +23,7 @@ namespace IrriWeather.IO
             {
                 if (!_initialized)
                 {
-                    //Retrieve internal configuration
                     var config = (int)Setup.GpioCfgGetInternals();
-
-                    //config = config.ApplyBits(false, 3, 2, 1, 0); // Clear debug flags
-                    //             config = config | (int) ConfigFlags.NoSignalHandler;
                     Setup.GpioCfgSetInternals((ConfigFlags)config);
                     var initResultCode = Setup.GpioInitialise();
                     _initialized = initResultCode >= ResultCode.Ok;
@@ -59,9 +55,10 @@ namespace IrriWeather.IO
 
             PiGpioIsrDelegate cb = new PiGpioIsrDelegate((gpioPin, levelChange, time) =>
             {
-                callback((int)gpioPin, (LevelChange)levelChange, time);
+                callback((int)gpioPin, levelChange, time);
             });
-           Pi.IO.GpioSetIsrFunc(gpio,(EdgeDetection)edgeDetection, 0, cb);
+
+           Pi.IO.GpioSetIsrFunc(gpio, edgeDetection, 0, cb);
 
         }
                
@@ -77,7 +74,7 @@ namespace IrriWeather.IO
         public void Write(int pin, bool state)
         {
             if (!CanWrite(pin))
-                throw new Exception($"Cannot write to pin {pin}. Writeable pings are 0 - 31");
+                throw new Exception($"Cannot write to pin {pin}. Writeable pins are 0 - 31");
 
             var gpio = (SystemGpio)pin;
             Pi.IO.GpioWrite(gpio, state);
@@ -98,8 +95,10 @@ namespace IrriWeather.IO
 
         private bool CanWrite(int pin)
         {
-            return pin > 0 && pin <= 31;
+            return Enum.IsDefined(typeof(UserGpio), pin);
         }
+
+
 
 
         #region IDisposable Support
@@ -112,22 +111,23 @@ namespace IrriWeather.IO
             {
                 if (disposing)
                 {
-                    //Board.Release();
                     // TODO: dispose managed state (managed objects).
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
+                Setup.GpioTerminate();
                 disposedValue = true;
             }
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~GpioService() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
+        ~RaspberryPiGpioService()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
 
         // This code added to correctly implement the disposable pattern.
         public void Dispose()

@@ -8,11 +8,11 @@ using System.Text;
 
 namespace IrriWeather.Irrigation.Infrastructure.Control
 {
-    public class ChannelControlService : IChannelControlService
+    public class ZoneControlService : IZoneControlService
     {
         private readonly IGpioService gpioService;
 
-        public ChannelControlService(IGpioService gpioService)
+        public ZoneControlService(IGpioService gpioService)
         {
             this.gpioService = gpioService;
         }

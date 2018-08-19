@@ -10,9 +10,9 @@ namespace IrriWeather.Irrigation.Application.Control
     public class ZoneService
     {
         private readonly IZoneRepository zoneRepository;
-        private readonly IChannelControlService controlService;
+        private readonly IZoneControlService controlService;
 
-        public ZoneService(IZoneRepository zoneRepository, IChannelControlService controlService)
+        public ZoneService(IZoneRepository zoneRepository, IZoneControlService controlService)
         {
             this.zoneRepository = zoneRepository;
             this.controlService = controlService;
@@ -65,6 +65,7 @@ namespace IrriWeather.Irrigation.Application.Control
             zone.ChangeDescription(cmd.Description);
             zone.SetNewChannel(controlService, cmd.Channel);
             zone.SetEnablement(controlService, cmd.IsEnabled);
+            zoneRepository.Update(zone);
             return new ZoneDto(zone.Id, zone.Name, zone.Description, zone.Channel, zone.IsEnabled, controlService.IsStarted(zone.Channel));
         }
 

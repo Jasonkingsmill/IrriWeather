@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IrriWeather.Irrigation.Domain.Control
 {
-    public interface IChannelControlService
+    public interface IZoneControlService
     {
         bool IsStarted(int channel);
         void Start(int channel);

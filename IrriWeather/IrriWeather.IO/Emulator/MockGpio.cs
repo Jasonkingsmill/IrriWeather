@@ -1,5 +1,4 @@
 ﻿using IrriWeather.IO.Control;
-using IrriWeather.IO.Control.ManagedModel;
 using IrriWeather.IO.Control.NativeEnums;
 using System;
 using System.Collections.Generic;
@@ -88,18 +87,6 @@ namespace IrriWeather.IO.Emulator
         /// </summary>
         public bool Value { get; set; }
 
-        /// <summary>
-        /// Provides GPIO change alert services.
-        /// This provides more sophisticated notification settings
-        /// but it is based on sampling.
-        /// </summary>
-        public GpioPinAlertService Alerts { get; }
-
-        /// <summary>
-        /// Provides GPIO Interrupt Service Routine services.
-        /// This is hardware-based input-only notifications.
-        /// </summary>
-        public GpioPinInterruptService Interrupts { get; }
 
         ///// <summary>
         ///// Gets the servo pin service.

@@ -22,6 +22,13 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
             context.SaveChanges();
         }
 
+        public void Update(Trigger entity)
+        {
+            context.Update(entity);
+            context.SaveChanges();
+        }
+
+
         public Trigger Find(Guid id)
         {
             return context.Triggers.FirstOrDefault(x => x.Id == id);

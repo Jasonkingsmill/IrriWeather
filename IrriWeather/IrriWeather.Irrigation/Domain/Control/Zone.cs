@@ -42,7 +42,7 @@ namespace IrriWeather.Irrigation.Domain.Control
         }
 
 
-        public void SetNewChannel(IChannelControlService service, int newChannel)
+        public void SetNewChannel(IZoneControlService service, int newChannel)
         {
             service.Stop(Channel);
             this.Channel = newChannel;
@@ -51,22 +51,22 @@ namespace IrriWeather.Irrigation.Domain.Control
 
 
 
-        public void Start(IChannelControlService service)
+        public void Start(IZoneControlService service)
         {
             service.Start(Channel);
         }
 
-        public void Stop(IChannelControlService service)
+        public void Stop(IZoneControlService service)
         {
             service.Stop(Channel);
         }
 
-        public bool IsStarted(IChannelControlService service)
+        public bool IsStarted(IZoneControlService service)
         {
             return service.IsStarted(Channel);
         }
 
-        public void SetEnablement(IChannelControlService service, bool isEnabled)
+        public void SetEnablement(IZoneControlService service, bool isEnabled)
         {
             if (!isEnabled)
             {

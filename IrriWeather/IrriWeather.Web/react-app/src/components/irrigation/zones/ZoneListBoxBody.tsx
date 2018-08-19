@@ -7,6 +7,7 @@ import Zone from 'src/data/Zone';
 interface IZoneListProps {
     zones: Zone[];
     onStartStopClick: any;
+    onEditZoneClick: any;
 }
 
 export const ZoneListBoxBody = (props: IZoneListProps) => {
@@ -17,7 +18,10 @@ export const ZoneListBoxBody = (props: IZoneListProps) => {
                     <ZoneTableHeader />
                     {
                         props.zones.map((zone) =>
-                            <ZoneTableRow {...zone} onStartStopClick={(e: any, id: string) => props.onStartStopClick(e,id)} />
+                            <ZoneTableRow {...zone}
+                                onStartStopClick={(e: any, id: string) => props.onStartStopClick(e, id)}
+                                onEditZoneClick={(e: any, id: string) => props.onEditZoneClick(e, id)}
+                            />
                     )}
                     <ZoneTableFooter />
                 </tbody>

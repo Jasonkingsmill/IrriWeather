@@ -40,11 +40,14 @@ namespace IrriWeather.Web
                 schedulerService.InitializeScheduler();
 
                 var zoneRepo = container.GetService<IZoneRepository>();
-                var channelService = container.GetService<IChannelControlService>();
+                var controlService = container.GetService<IZoneControlService>();
                 var zones = zoneRepo.FindAll();
-                foreach (var zone in zones)
+                if (zones != null)
                 {
-                    channelService.Register(zone.Channel);
+                    foreach (var zone in zones)
+                    {
+                        controlService.Register(zone.Channel);
+                    }
                 }
             }
 

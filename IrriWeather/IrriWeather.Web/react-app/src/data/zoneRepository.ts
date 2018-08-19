@@ -50,7 +50,7 @@ export class ZoneRepository {
         }, );
 
         if (!response.ok)
-            throw new DOMException(`Error fetching zones: ${response.statusText}`);
+            throw new DOMException(`Error adding zone: ${response.statusText}`);
 
         let payload = await response.json();
 
@@ -58,7 +58,7 @@ export class ZoneRepository {
     }
 
 
-    public async remove(id: string): Promise<ZoneApiModel | null> {
+    public async remove(id: string): Promise<void | null> {
 
         let response = await fetch(this.baseUrl + "/" + id, {
             method: "delete",
@@ -69,18 +69,15 @@ export class ZoneRepository {
         }, );
 
         if (!response.ok)
-            throw new DOMException(`Error fetching zones: ${response.statusText}`);
+            throw new DOMException(`Error removing zone: ${response.statusText}`);
 
-        let payload = await response.json();
-
-        return payload as ZoneApiModel;
     }
 
 
-    public async update(zone: AddZoneApiModel): Promise<ZoneApiModel | null> {
+    public async update(id: string, zone: AddZoneApiModel): Promise<ZoneApiModel | null> {
 
-        let response = await fetch(this.baseUrl, {
-            method: "post",
+        let response = await fetch(this.baseUrl + "/" + id, {
+            method: "put",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -89,7 +86,7 @@ export class ZoneRepository {
         }, );
 
         if (!response.ok)
-            throw new DOMException(`Error fetching zones: ${response.statusText}`);
+            throw new DOMException(`Error update zone: ${response.statusText}`);
 
         let payload = await response.json();
 
