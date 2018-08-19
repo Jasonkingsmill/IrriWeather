@@ -24,14 +24,18 @@ export class NavMenu extends React.Component<{}, {}> {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to={'/weather'} activeClassName='active'>
+                            <NavLink to={'/weather'} activeClassName='active' >
                                 <span className='glyphicon glyphicon-cloud'></span> Weather
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to={'/irrigation'} activeClassName='active'>
-                                <span className='glyphicon glyphicon-leaf'></span> Irrigation
+                            <NavLink to={'/irrigation/zones'} activeClassName='active'>
+                                <span className='glyphicon glyphicon-leaf'></span> Irrigation Zones
                             </NavLink>
+                            <NavLink to={'/irrigation/schedule'} activeClassName='active'>
+                                <span className='glyphicon glyphicon-leaf'></span> Irrigation Schedule
+                            </NavLink>
+            
                         </li>
                         <li>
                             <NavLink to={'/settings'} activeClassName='active'>

@@ -2,8 +2,7 @@
 import { ZoneListBoxHeader } from './ZoneListBoxHeader';
 import { ZoneListBoxBody } from './ZoneListBoxBody';
 import { ZoneListBoxFooter } from './ZoneListBoxFooter';
-import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
-import Zone from 'src/data/Zone';
+import Zone from 'src/data/irrigation/zones/Zone';
 
 
 interface IZoneListProps {

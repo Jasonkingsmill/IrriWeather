@@ -2,7 +2,7 @@
 import { ZoneTableHeader } from './ZoneTableHeader';
 import { ZoneTableRow } from './ZoneTableRow';
 import { ZoneTableFooter } from './ZoneTableFooter';
-import Zone from 'src/data/Zone';
+import Zone from 'src/data/irrigation/zones/Zone';
 
 interface IZoneListProps {
     zones: Zone[];

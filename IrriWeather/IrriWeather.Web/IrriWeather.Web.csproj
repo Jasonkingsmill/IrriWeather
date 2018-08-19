@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="react-app\src\data\api-models\UpdateZoneApiModel.ts" />
+    <None Remove="react-app\src\data\irrigation\schedule\api-models\UpdateScheduleApiModel.ts" />
+    <None Remove="react-app\src\data\irrigation\schedule\Schedule.ts" />
+    <None Remove="react-app\src\data\irrigation\zones\api-models\UpdateZoneApiModel.ts" />
     <None Remove="react-app\src\data\Zone.ts" />
   </ItemGroup>
 
@@ -31,8 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="react-app\src\data\api-models\UpdateZoneApiModel.ts" />
-    <TypeScriptCompile Include="react-app\src\data\Zone.ts" />
+    <TypeScriptCompile Include="react-app\src\data\irrigation\schedule\api-models\UpdateScheduleApiModel.ts" />
+    <TypeScriptCompile Include="react-app\src\data\irrigation\schedule\Schedule.ts" />
+    <TypeScriptCompile Include="react-app\src\data\irrigation\zones\api-models\UpdateZoneApiModel.ts" />
+    <TypeScriptCompile Include="react-app\src\data\irrigation\zones\Zone.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

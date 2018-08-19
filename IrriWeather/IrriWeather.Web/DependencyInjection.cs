@@ -1,9 +1,9 @@
 ﻿using IrriWeather.IO;
 using IrriWeather.Irrigation.Application;
 using IrriWeather.Irrigation.Application.Control;
-using IrriWeather.Irrigation.Application.Schedule;
+using IrriWeather.Irrigation.Application.Scheduling;
 using IrriWeather.Irrigation.Domain.Control;
-using IrriWeather.Irrigation.Domain.Schedule;
+using IrriWeather.Irrigation.Domain.Scheduling;
 using IrriWeather.Irrigation.Infrastructure.Control;
 using IrriWeather.Irrigation.Infrastructure.Data;
 using Microsoft.CodeAnalysis;
@@ -33,7 +33,7 @@ namespace IrriWeather.Web
 
             services.AddTransient<ZoneService>();
             services.AddTransient<IZoneControlService, ZoneControlService>();
-            services.AddTransient<ITriggerRepository, TriggerRepository>();
+            services.AddTransient<IScheduleRepository, ScheduleRepository>();
             services.AddTransient<IZoneRepository, ZoneRepository>();
             services.AddScoped<IZoneControlService, ZoneControlService>();
 
@@ -49,7 +49,7 @@ namespace IrriWeather.Web
             });
 
 
-            services.AddScoped<SchedulingService>();
+            services.AddScoped<ScheduleService>();
 
 
             services.AddSingleton<IScheduler>(x =>

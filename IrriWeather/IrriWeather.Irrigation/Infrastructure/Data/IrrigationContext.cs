@@ -1,6 +1,6 @@
 ﻿using IrriWeather.Irrigation.Domain;
 using IrriWeather.Irrigation.Domain.Control;
-using IrriWeather.Irrigation.Domain.Schedule;
+using IrriWeather.Irrigation.Domain.Scheduling;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +14,7 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
         private readonly string connectionString;
 
         public DbSet<Zone> Zones { get; set; }
-        public DbSet<Trigger> Triggers { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
 
         public IrrigationContext(string dataSource)
         {
@@ -33,15 +33,19 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
         {
             modelBuilder.Entity<Zone>().HasIndex(x => x.Channel).IsUnique(true);
 
-            modelBuilder.Entity<DateTimeTrigger>();
-            modelBuilder.Entity<DayOfMonthTrigger>(trigger =>
+            modelBuilder.Entity<DateTimeSchedule>();
+            modelBuilder.Entity<DayOfMonthSchedule>(schedule =>
             {
-                trigger.Ignore(x => x.Days);
-                trigger.Property<string>("DaysOfMonth").HasField("_days");
+                schedule.Ignore(x => x.Days);
+                schedule.Property<string>("DaysOfMonth").HasField("_days");
             });
-            modelBuilder.Entity<DayOfWeekTrigger>();
-            modelBuilder.Entity<EvenDaysTrigger>();
-            modelBuilder.Entity<OddDaysTrigger>();
+            modelBuilder.Entity<DayOfWeekSchedule>(schedule =>
+            {
+                schedule.Ignore(x => x.Days);
+                schedule.Property<string>("DaysOfWeek").HasField("_days");
+            });
+            modelBuilder.Entity<EvenDaysSchedule>();
+            modelBuilder.Entity<OddDaysSchedule>();
         }
     }
 }

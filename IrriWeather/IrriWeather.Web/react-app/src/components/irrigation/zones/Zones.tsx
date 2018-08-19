@@ -1,15 +1,14 @@
 ﻿import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ZoneList } from './ZoneList';
-import { ZoneRepository } from '../../../data/ZoneRepository';
-import { ZoneApiModel } from '../../../data/api-models/ZoneApiModel';
-import { Zone } from '../../../data/Zone';
 import { AddZoneDialog, IAddZoneDialogProps } from 'src/components/irrigation/zones/AddZoneDialog';
-import { AddZoneApiModel } from 'src/data/api-models/AddZoneApiModel';
 import { FormEvent, ChangeEvent } from 'react';
-import { ZoneService } from 'src/data/ZoneService';
 import EditZoneDialog, { IEditZoneDialogProps } from 'src/components/irrigation/zones/EditZoneDialog';
-import UpdateZoneApiModel from 'src/data/api-models/UpdateZoneApiModel';
+import Zone from 'src/data/irrigation/zones/Zone';
+import { ZoneRepository } from 'src/data/irrigation/zones/ZoneRepository';
+import { ZoneService } from 'src/data/irrigation/zones/ZoneService';
+import AddZoneApiModel from 'src/data/irrigation/zones/api-models/AddZoneApiModel';
+import UpdateZoneApiModel from 'src/data/irrigation/zones/api-models/UpdateZoneApiModel';
 
 
 export class Zones extends React.Component<RouteComponentProps<{}>, {}> {
@@ -18,6 +17,8 @@ export class Zones extends React.Component<RouteComponentProps<{}>, {}> {
         addZoneDialogProps: IAddZoneDialogProps,
         editZoneDialogProps: IEditZoneDialogProps
     }
+
+    private repo: ZoneRepository;
 
     constructor(props: RouteComponentProps<{}>) {
         super(props);
@@ -64,7 +65,6 @@ export class Zones extends React.Component<RouteComponentProps<{}>, {}> {
     }
 
 
-    private repo: ZoneRepository;
 
 
 

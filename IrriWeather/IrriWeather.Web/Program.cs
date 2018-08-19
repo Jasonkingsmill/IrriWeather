@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using IrriWeather.Irrigation.Application.Schedule;
+using IrriWeather.Irrigation.Application.Scheduling;
 using Quartz;
 using Quartz.Impl;
 using IrriWeather.Irrigation.Application;
@@ -36,7 +36,7 @@ namespace IrriWeather.Web
             var container = services.BuildServiceProvider();
             using (var scope = container.CreateScope())
             {
-                var schedulerService = container.GetRequiredService<SchedulingService>();
+                var schedulerService = container.GetRequiredService<ScheduleService>();
                 schedulerService.InitializeScheduler();
 
                 var zoneRepo = container.GetService<IZoneRepository>();
