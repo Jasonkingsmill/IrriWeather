@@ -6,8 +6,10 @@ namespace IrriWeather.Irrigation.Application.Scheduling
 {
     public class AddDayOfMonthScheduleCommand
     {
-        public AddDayOfMonthScheduleCommand(IEnumerable<int> days, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled)
+        public AddDayOfMonthScheduleCommand(string name, string description, IEnumerable<int> days, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled)
         {
+            Name = name;
+            Description = description;
             Days = days;
             StartTime = startTime;
             Duration = duration;
@@ -15,6 +17,8 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             IsEnabled = isEnabled;
         }
 
+        public string Name { get; }
+        public string Description { get; }
         public IEnumerable<int> Days { get; }
         public TimeSpan StartTime { get; private set; }
         public TimeSpan Duration { get; private set; }

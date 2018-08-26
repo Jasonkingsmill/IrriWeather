@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace IrriWeather.Irrigation.Infrastructure.Data
 {
@@ -33,19 +34,11 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
         {
             modelBuilder.Entity<Zone>().HasIndex(x => x.Channel).IsUnique(true);
 
-            modelBuilder.Entity<DateTimeSchedule>();
-            modelBuilder.Entity<DayOfMonthSchedule>(schedule =>
+            modelBuilder.Entity<Schedule>(schedule =>
             {
-                schedule.Ignore(x => x.Days);
-                schedule.Property<string>("DaysOfMonth").HasField("_days");
+                //schedule.Ignore(x => x.Days);
+                schedule.Property(x => x.Days).HasField("_days").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Convert.ToInt32(y)).ToList());
             });
-            modelBuilder.Entity<DayOfWeekSchedule>(schedule =>
-            {
-                schedule.Ignore(x => x.Days);
-                schedule.Property<string>("DaysOfWeek").HasField("_days");
-            });
-            modelBuilder.Entity<EvenDaysSchedule>();
-            modelBuilder.Entity<OddDaysSchedule>();
         }
     }
 }

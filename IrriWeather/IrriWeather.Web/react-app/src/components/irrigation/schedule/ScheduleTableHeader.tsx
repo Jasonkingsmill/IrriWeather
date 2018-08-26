@@ -6,9 +6,11 @@ export const ScheduleTableHeader = () => {
         <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Channel</th>
+            <th>Type</th>
+            <th>Days</th>
+            <th>Start Time</th>
+            <th>Duration</th>
             <th>Enabled</th>
-            <th>Status</th>
         </tr>
     );
 }

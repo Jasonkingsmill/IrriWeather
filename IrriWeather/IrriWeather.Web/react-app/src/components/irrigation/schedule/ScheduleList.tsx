@@ -8,7 +8,6 @@ import Schedule from 'src/data/irrigation/schedule/Schedule';
 interface IScheduleListProps {
     schedules: Schedule[],
     onAddScheduleClick: any,
-    onStartStopClick: any,
     onEditScheduleClick: any
 }
 
@@ -30,7 +29,6 @@ export class ScheduleList extends React.Component<IScheduleListProps, {}> {
                             <ScheduleListBoxHeader />
                             <ScheduleListBoxBody
                                 schedules={this.props.schedules}
-                                onStartStopClick={(e: any, id: string) => this.props.onStartStopClick(e, id)}
                                 onEditScheduleClick={(e: any, id: string) => this.props.onEditScheduleClick(e, id)}
                             />
                             <ScheduleListBoxFooter onAddScheduleClick={this.props.onAddScheduleClick} />

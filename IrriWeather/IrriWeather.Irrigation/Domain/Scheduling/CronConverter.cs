@@ -30,6 +30,29 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
             }
         }
 
+        public static string ToCronRepresentationSingle(int day)
+        {
+            switch (day)
+            {
+                case 1:
+                    return "MON";
+                case 2:
+                    return "TUE";
+                case 3:
+                    return "WED";
+                case 4:
+                    return "THU";
+                case 5:
+                    return "FRI";
+                case 6:
+                    return "SAT";
+                case 7:
+                    return "SUN";
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
         /// <summary>
         /// Converts enumerator DaysOfWeek into string representation
         /// like "MON, TUE, WED"
@@ -44,6 +67,11 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
         public static string ToCronRepresentation(IEnumerable<int> days)
         {
             return String.Join(",", days);
+        }
+
+        public static string ToCronWeekdayRepresentation(IEnumerable<int> days)
+        {
+            return String.Join(",", days.Select(x => ToCronRepresentationSingle(x)));
         }
 
         public static IEnumerable<DaysOfWeek> GetFlags(DaysOfWeek days)

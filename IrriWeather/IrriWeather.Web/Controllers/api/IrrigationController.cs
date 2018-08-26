@@ -122,7 +122,7 @@ namespace IrriWeather.Web.Controllers
         }
 
 
-#endregion
+        #endregion
 
 
 
@@ -132,18 +132,22 @@ namespace IrriWeather.Web.Controllers
 
 
         [HttpGet("schedules")]
-        public IEnumerable<ZoneSummaryViewModel> GetAllSchedules()
+        public IEnumerable<ScheduleSummaryViewModel> GetAllSchedules()
         {
-            var zones = _zoneService.GetZones();
-            return zones.Select(zone => new ZoneSummaryViewModel()
+            var schedules = _scheduleService.GetSchedules();
+            return schedules.Select(sched => new ScheduleSummaryViewModel()
             {
-                Id = zone.Id,
-                Channel = zone.Channel,
-                Description = zone.Description,
-                IsEnabled = zone.IsEnabled,
-                Name = zone.Name,
-                IsStarted = zone.IsStarted
-
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
             });
         }
 
@@ -151,6 +155,135 @@ namespace IrriWeather.Web.Controllers
 
 
 
+        [HttpPost("schedules/datetime")]
+        public IActionResult AddDateTimeSchedule([FromBody]AddScheduleViewModel model)
+        {
+            var cmd = new AddDateTimeScheduleCommand(model.Name, model.Description, model.StartDate, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var sched = _scheduleService.AddDateTimeSchedule(cmd);
+            var newschedule = new ScheduleSummaryViewModel()
+            {
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
+            };
+            return Created(newschedule.Id.ToString(), newschedule);
+        }
+
+        [HttpPost("schedules/daysofmonth")]
+        public IActionResult AddDaysOfMonthSchedule([FromBody]AddScheduleViewModel model)
+        {
+            var cmd = new AddDayOfMonthScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var sched = _scheduleService.AddDayOfMonthSchedule(cmd);
+            var newschedule = new ScheduleSummaryViewModel()
+            {
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
+            };
+            return Created(newschedule.Id.ToString(), newschedule);
+        }
+
+        [HttpPost("schedules/daysofweek")]
+        public IActionResult AddDaysOfWeekSchedule([FromBody]AddScheduleViewModel model)
+        {
+            var cmd = new AddDayOfWeekScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var sched = _scheduleService.AddDayOfWeekSchedule(cmd);
+            var newschedule = new ScheduleSummaryViewModel()
+            {
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
+            };
+            return Created(newschedule.Id.ToString(), newschedule);
+        }
+
+
+        [HttpPost("schedules/evendays")]
+        public IActionResult AddEvenDaysSchedule([FromBody]AddScheduleViewModel model)
+        {
+            var cmd = new AddEvenDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var sched = _scheduleService.AddEvenDaysSchedule(cmd);
+            var newschedule = new ScheduleSummaryViewModel()
+            {
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
+            };
+            return Created(newschedule.Id.ToString(), newschedule);
+        }
+
+
+        [HttpPost("schedules/odddays")]
+        public IActionResult AddOddDaysSchedule([FromBody]AddScheduleViewModel model)
+        {
+            var cmd = new AddOddDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var sched = _scheduleService.AddOddDaysSchedule(cmd);
+            var newschedule = new ScheduleSummaryViewModel()
+            {
+                Id = sched.Id,
+                Name = sched.Name,
+                Description = sched.Description,
+                ScheduleType = sched.ScheduleType,
+                Days = sched.Days,
+                Duration = sched.Duration,
+                EnabledUntil = sched.EnabledUntil,
+                IsEnabled = sched.IsEnabled,
+                StartDate = sched.StartDate,
+                StartTime = sched.StartTime,
+                ZoneIds = sched.ZoneIds
+            };
+            return Created(newschedule.Id.ToString(), newschedule);
+        }
+
+
+
+
+
+
+
+
+
+
+        [HttpDelete("schedules/{id:guid}")]
+        public IActionResult RemoveSchedule(Guid id)
+        {
+            var cmd = new RemoveScheduleCommand(id);
+            _scheduleService.RemoveSchedule(cmd);
+            return Ok();
+
+        }
         #endregion
     }
 }

@@ -6,15 +6,21 @@ namespace IrriWeather.Irrigation.Application.Scheduling
 {
     public class AddDateTimeScheduleCommand
     {
-        public AddDateTimeScheduleCommand(DateTime startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled)
+        public AddDateTimeScheduleCommand(string name, string description, DateTime startDate, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled)
         {
+            Name = name;
+            Description = description;
+            StartDate = startDate;
             StartTime = startTime;
             Duration = duration;
             EnabledUntil = enabledUntil;
             IsEnabled = isEnabled;
         }
 
-        public DateTime StartTime { get; private set; }
+        public string Name { get; }
+        public string Description { get; }
+        public DateTime StartDate { get; private set; }
+        public TimeSpan StartTime { get; private set; }
         public TimeSpan Duration { get; private set; }
         public DateTime EnabledUntil { get; private set; }
         public bool IsEnabled { get; private set; }

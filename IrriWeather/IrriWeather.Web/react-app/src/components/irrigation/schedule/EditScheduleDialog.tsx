@@ -12,8 +12,14 @@ export interface IEditScheduleDialogProps {
     scheduleId: string;
     scheduleName: string;
     scheduleDescription: string;
-    scheduleChannel: string;
-    scheduleEnabled: boolean;
+    scheduleType: string;
+    scheduleStartTime: string;
+    scheduleStartDate: string;
+    scheduleDuration: string;
+    scheduleEnabledUntil: string;
+    scheduleDays: string;
+    scheduleZoneIds: Array<string>;
+    scheduleIsEnabled: boolean;
 }
 
 export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
@@ -53,26 +59,13 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                             </div>
                         </div>
                         <div className='form-group' >
-                            <label htmlFor='scheduleChannel' className='col-sm-4 control-label'>Channel</label>
-                            <div>
-                                <input
-                                    name="scheduleChannel"
-                                    type="number"
-                                    placeholder="Channel No. between 0-31"
-                                    autoComplete="off"
-                                    onChange={props.handleOnChange}
-                                    value={props.scheduleChannel}
-                                />
-                            </div>
-                        </div>
-                        <div className='form-group' >
                             <label htmlFor='scheduleEnabled' className='col-sm-4 control-label'>Enabled</label>
                             <div>
                                 <input
                                     name="scheduleEnabled"
                                     type="checkbox"
                                     onChange={props.handleOnChange}
-                                    checked={props.scheduleEnabled}
+                                    checked={props.scheduleIsEnabled}
                                 />
                             </div>
                         </div>

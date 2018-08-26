@@ -1,15 +1,21 @@
 ﻿import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import ScheduleType from 'src/data/irrigation/schedule/api-models/ScheduleType';
+import { TimeSpan } from 'src/data/TimeSpan';
 
 interface IScheduleTableRowProps {
     id: string;
     name: string;
     description: string;
-    channel: number;
+    scheduleType: ScheduleType;
+    startTime: string;
+    startDate: string;
+    duration: string;
+    enabledUntil: string;
+    days: Array<number>;
+    zoneIds: Array<string>;
     isEnabled: boolean;
-    isStarted: boolean;
-    onStartStopClick: any;
     onEditScheduleClick: any;
 }
 
@@ -20,14 +26,26 @@ export class ScheduleTableRow extends React.Component<IScheduleTableRowProps, {}
             <tr>
                 <td>{this.props.name}</td>
                 <td>{this.props.description}</td>
-                <td>{this.props.channel}</td>
+                <td>{this.props.scheduleType}</td>
+
+                {this.props.scheduleType == ScheduleType.DateTime &&
+                    <td>{this.props.startDate}</td>
+                }
+                {(this.props.scheduleType == ScheduleType.DaysOfMonth || this.props.scheduleType == ScheduleType.DaysOfWeek) &&
+                    <td>{this.props.days.join(",")}</td>
+                }
+                {this.props.scheduleType == ScheduleType.EvenDays &&
+                    <td>Even Days</td>
+                }
+                {this.props.scheduleType == ScheduleType.OddDays &&
+                    <td>Odd Days</td>
+                }
+
+                <td>{this.props.startTime}</td>
+                <td>{this.props.duration}</td>
                 <td>{this.props.isEnabled.toString()}</td>
-                <td>{this.props.isStarted ? 'Started' : 'Stopped'}
-                    <Button bsStyle={this.props.isStarted ? 'danger' : 'primary'} onClick={(e) => { this.props.onStartStopClick(e, this.props.id) }} > {this.props.isStarted ? 'STOP' : 'START'}
-                    </Button>
-                </td>
                 <td>
-                    <Button  onClick={(e) => { this.props.onEditScheduleClick(e, this.props.id) }} >Edit</Button>
+                    <Button onClick={(e) => { this.props.onEditScheduleClick(e, this.props.id) }} >Edit</Button>
                 </td>
             </tr>
         );

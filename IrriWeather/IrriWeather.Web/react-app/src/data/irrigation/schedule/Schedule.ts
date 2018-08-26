@@ -1,11 +1,18 @@
-﻿
+﻿import { ScheduleType } from "src/data/irrigation/schedule/api-models/ScheduleType";
+import { TimeSpan } from "src/data/TimeSpan";
+
 export class Schedule {
     id: string;
     name: string;
     description: string;
-    channel: number;
+    scheduleType: ScheduleType;
+    startTime: string;
+    startDate: string;
+    duration: string;
+    enabledUntil: string;
+    days: Array<number>;
+    zoneIds: Array<string>;
     isEnabled: boolean;
-    isStarted: boolean;
 }
 
 export default Schedule;

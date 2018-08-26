@@ -12,6 +12,7 @@
     <None Remove="react-app\src\data\irrigation\schedule\api-models\UpdateScheduleApiModel.ts" />
     <None Remove="react-app\src\data\irrigation\schedule\Schedule.ts" />
     <None Remove="react-app\src\data\irrigation\zones\api-models\UpdateZoneApiModel.ts" />
+    <None Remove="react-app\src\data\TimeSpan.ts" />
     <None Remove="react-app\src\data\Zone.ts" />
   </ItemGroup>
 
@@ -37,6 +38,7 @@
     <TypeScriptCompile Include="react-app\src\data\irrigation\schedule\Schedule.ts" />
     <TypeScriptCompile Include="react-app\src\data\irrigation\zones\api-models\UpdateZoneApiModel.ts" />
     <TypeScriptCompile Include="react-app\src\data\irrigation\zones\Zone.ts" />
+    <TypeScriptCompile Include="react-app\src\data\TimeSpan.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

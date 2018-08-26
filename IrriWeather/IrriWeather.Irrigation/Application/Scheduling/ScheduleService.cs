@@ -33,52 +33,75 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         }
 
 
-        public void AddDateTimeSchedule(AddDateTimeScheduleCommand cmd)
+        public IEnumerable<ScheduleDto> GetSchedules()
         {
-            var schedule = new DateTimeSchedule(cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            var schedules = scheduleRepository.FindAll();
+            var models = schedules.Select(sched => new ScheduleDto(sched.Id, sched.Name, sched.Description, sched.ScheduleType.ToString(), sched.StartTime, 
+                sched.StartDate, sched.Days, sched.IsEnabled, sched.Duration, sched.EnabledUntil, sched.Zones.Select(y=>y.Id)));
+            return models;
+        }
+
+        
+        public ScheduleDto AddDateTimeSchedule(AddDateTimeScheduleCommand cmd)
+        {
+            var factory = new ScheduleFactory();
+            Schedule schedule = factory.CreateDateTimeSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
+            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled, 
+                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x=>x.Id));
         }
 
-        public void AddDayOfMonthSchedule(AddDayOfMonthScheduleCommand cmd)
+        public ScheduleDto AddDayOfMonthSchedule(AddDayOfMonthScheduleCommand cmd)
         {
-            var schedule = new DayOfMonthSchedule(cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            var factory = new ScheduleFactory();
+            Schedule schedule = factory.CreateDayOfMonthSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
+            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
+                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
         }
 
 
-        public void AddDayOfWeekSchedule(AddDayOfWeekScheduleCommand cmd)
+        public ScheduleDto AddDayOfWeekSchedule(AddDayOfWeekScheduleCommand cmd)
         {
-
-            var schedule = new DayOfWeekSchedule(cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            var factory = new ScheduleFactory();
+            Schedule schedule = factory.CreateDayOfWeekSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
+            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
+                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
         }
 
 
-        public void AddEvenDaysSchedule(AddEvenDaysScheduleCommand cmd)
+        public ScheduleDto AddEvenDaysSchedule(AddEvenDaysScheduleCommand cmd)
         {
-            var schedule = new EvenDaysSchedule(cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            var factory = new ScheduleFactory();
+            Schedule schedule = factory.CreateEvenDaysSchedule(cmd.Name, cmd.Description, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
+            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
+                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
         }
 
 
-        public void AddOddDaysSchedule(AddOddDaysScheduleCommand cmd)
+        public ScheduleDto AddOddDaysSchedule(AddOddDaysScheduleCommand cmd)
         {
-            var schedule = new OddDaysSchedule(cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            var factory = new ScheduleFactory();
+            Schedule schedule = factory.CreateOddDaysSchedule(cmd.Name, cmd.Description, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
+            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
+                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
         }
 
 
-        public void Remove(RemoveScheduleCommand cmd)
+        public void RemoveSchedule(RemoveScheduleCommand cmd)
         {
             var schedule = scheduleRepository.Find(cmd.Id);
             if (schedule == null)

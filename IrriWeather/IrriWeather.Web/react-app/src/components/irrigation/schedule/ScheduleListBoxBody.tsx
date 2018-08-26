@@ -6,7 +6,6 @@ import Schedule from 'src/data/irrigation/schedule/Schedule';
 
 interface IScheduleListProps {
     schedules: Schedule[];
-    onStartStopClick: any;
     onEditScheduleClick: any;
 }
 
@@ -19,7 +18,6 @@ export const ScheduleListBoxBody = (props: IScheduleListProps) => {
                     {
                         props.schedules.map((schedule) =>
                             <ScheduleTableRow {...schedule}
-                                onStartStopClick={(e: any, id: string) => props.onStartStopClick(e, id)}
                                 onEditScheduleClick={(e: any, id: string) => props.onEditScheduleClick(e, id)}
                             />
                     )}

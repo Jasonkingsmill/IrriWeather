@@ -45,7 +45,10 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
                     _cronString = string.Format("0 {0} {1} ? * MON-FRI *", _startMinute, _startHour);
                     break;
                 case CronExpressionType.EverySpecificWeekDayAt:
-                    _cronString = string.Format("0 {0} {1} ? * {2} *", _startMinute, _startHour, CronConverter.ToCronRepresentation(_days));
+                    if (_dayNumbers != null && _dayNumbers.Count != 0)
+                        _cronString = string.Format("0 {0} {1} ? * {2} *", _startMinute, _startHour, CronConverter.ToCronWeekdayRepresentation(_dayNumbers));
+                    else
+                        _cronString = string.Format("0 {0} {1} ? * {2} *", _startMinute, _startHour, CronConverter.ToCronRepresentation(_days));
                     break;
                 case CronExpressionType.EverySpecificDayEveryNMonthAt:
                     _cronString = string.Format("0 {0} {1} {2} {3} ? *", _startMinute, _startHour, _dayNumber, _interval);
@@ -107,7 +110,7 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
         protected CronExpression(IEnumerable<string> days, int startHour, int startMinute, CronExpressionType expressionType)
         {
             var tempDays = days.Select(x => Enum.Parse<DaysOfWeek>(x));
-            foreach(var day in tempDays)
+            foreach (var day in tempDays)
             {
                 _days = day | _days;
             }
@@ -262,6 +265,22 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
             var ce = new CronExpression(days, hour, minute, CronExpressionType.EverySpecificWeekDayAt);
             return ce;
         }
+
+
+
+        /// <summary>
+        /// Create new CronExpression instance, which occurs on specified week days at specified hours
+        /// </summary>
+        /// <param name="hour">Hour, when occurence will happen</param>
+        /// <param name="minute">Minute, when occurence will happen</param>
+        /// <param name="days">Days, when occurence will happen</param>
+        /// <returns>New CronExpression instance</returns>
+        public static CronExpression EverySpecificWeekDayAt(int hour, int minute, IEnumerable<int> dayNumbers)
+        {
+            var ce = new CronExpression(dayNumbers, hour, minute, CronExpressionType.EverySpecificWeekDayAt);
+            return ce;
+        }
+
 
 
         /// <summary>
