@@ -9,13 +9,13 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
 {
     public class Schedule : Entity
     {
-        private HashSet<Zone> zones = new HashSet<Zone>();
         //private string daysAsString { get; set; }
 
         //private HashSet<int> _days { get => daysAsString.Split(";").Select(x => int.Parse(x)).ToHashSet(); set => this.daysAsString = string.Join(";", value); }
 
 
-        private List<int> _days = new List<int>();
+        private HashSet<Guid> _zoneIds = new HashSet<Guid>();
+        private HashSet<int> _days = new HashSet<int>();
 
         private Schedule()
         {
@@ -85,17 +85,13 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
         public ScheduleType ScheduleType { get; protected set; }
         public TimeSpan StartTime { get; private set; }
         public DateTime StartDate { get; private set; }
-        public IEnumerable<int> Days { get { return _days; } set { _days = value.ToList(); } }
+        public IEnumerable<int> Days { get { return _days.ToHashSet(); } private set { _days = value.ToHashSet(); } }
 
 
         public bool IsEnabled { get; protected set; }
         public TimeSpan Duration { get; protected set; }
         public DateTime EnabledUntil { get; protected set; }
-        public IEnumerable<Zone> Zones { get => zones.AsEnumerable(); set => zones = value.ToHashSet(); }
-
-
-
-
+        public IEnumerable<Guid> ZoneIds { get => _zoneIds.ToHashSet(); private set => _zoneIds = value.ToHashSet(); }
 
 
 
@@ -125,18 +121,21 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
             IsEnabled = enabled;
         }
 
-        public void AttachZone(Zone zone)
+
+        public void UpdateZones(IEnumerable<Guid> zoneIds)
         {
-            if (zone == null)
-                throw new ArgumentNullException(nameof(zone));
-            this.zones.Add(zone);
+            this._zoneIds.Clear();
+            this.ZoneIds = zoneIds.ToHashSet();
         }
 
-        public void DetachZone(Zone zone)
+        public void AttachZone(Guid zoneId)
         {
-            if (zone == null)
-                throw new ArgumentNullException(nameof(zone));
-            this.zones.Remove(zone);
+            this._zoneIds.Add(zoneId);
+        }
+
+        public void DetachZone(Guid zoneId)
+        {
+            this._zoneIds.Remove(zoneId);
         }
 
         public string BuildCronExpression()

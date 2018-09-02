@@ -32,12 +32,15 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Zone>().HasIndex(x => x.Channel).IsUnique(true);
+            modelBuilder.Entity<Zone>(zone =>
+            {
+                zone.HasIndex(x => x.Channel).IsUnique(true);
+            });
 
             modelBuilder.Entity<Schedule>(schedule =>
             {
-                //schedule.Ignore(x => x.Days);
-                schedule.Property(x => x.Days).HasField("_days").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Convert.ToInt32(y)).ToList());
+                schedule.Property(x => x.ZoneIds).HasField("_zoneIds").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Guid.Parse(y)).ToHashSet());
+                schedule.Property(x => x.Days).HasField("_days").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Convert.ToInt32(y)).ToHashSet());
             });
         }
     }

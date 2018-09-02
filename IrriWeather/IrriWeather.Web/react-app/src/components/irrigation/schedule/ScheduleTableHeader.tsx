@@ -7,6 +7,7 @@ export const ScheduleTableHeader = () => {
             <th>Name</th>
             <th>Description</th>
             <th>Type</th>
+            <th>Zones</th>
             <th>Days</th>
             <th>Start Time</th>
             <th>Duration</th>

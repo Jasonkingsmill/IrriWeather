@@ -1,5 +1,6 @@
 ﻿using IrriWeather.Irrigation.Domain;
 using IrriWeather.Irrigation.Domain.Scheduling;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

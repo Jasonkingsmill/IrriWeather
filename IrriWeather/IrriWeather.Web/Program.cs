@@ -13,6 +13,8 @@ using Quartz;
 using Quartz.Impl;
 using IrriWeather.Irrigation.Application;
 using IrriWeather.Irrigation.Domain.Control;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace IrriWeather.Web
 {
@@ -23,10 +25,15 @@ namespace IrriWeather.Web
 
         public static void Main(string[] args)
         {
+            var applicationPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath);
 
+            if (Debugger.IsAttached)
+            {
+                applicationPath = Directory.GetCurrentDirectory();
+            }
 
             var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+            .SetBasePath(applicationPath)
             .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();
@@ -51,13 +58,30 @@ namespace IrriWeather.Web
                 }
             }
 
-            var host = BuildWebHost(args, services);
+            var host = BuildWebHost(args, services, applicationPath);
 
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+            {
+                Console.WriteLine("Process exiting...");
+                Console.WriteLine("Stopping all zones...");
+                var zoneRepo = container.GetService<IZoneRepository>();
+                var controlService = container.GetService<IZoneControlService>();
+                var zones = zoneRepo.FindAll();
+                if (zones != null)
+                {
+                    foreach (var zone in zones)
+                    {
+                        controlService.Stop(zone.Channel);
+                    }
+                }
+            };
 
             host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args, IServiceCollection services) =>
+
+        public static IWebHost BuildWebHost(string[] args, IServiceCollection services, string applicationPath) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureServices((s) =>
                 {
@@ -66,6 +90,7 @@ namespace IrriWeather.Web
                         s.Add(service);
                     }
                 })
+                .UseContentRoot(applicationPath)
                 .UseUrls("http://*:5000")
                 .UseStartup<Startup>()
                 .Build();

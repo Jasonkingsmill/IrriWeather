@@ -116,8 +116,9 @@ namespace IrriWeather.IO
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-
+                
                 Setup.GpioTerminate();
+                _initialized = false;
                 disposedValue = true;
             }
         }

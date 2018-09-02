@@ -64,17 +64,16 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             closeDialog: () => this.closeAddScheduleDialog(),
             handleOnChange: this.onAddScheduleChange,
             handleOnZoneSelectChange: this.onAddScheduleZoneChange,
-            onEditScheduleClick: this.handleOnEditScheduleClick,
             getZones: () => this.state.zones,
             scheduleName: "",
             scheduleDescription: "",
             scheduleType: ScheduleType.DaysOfWeek,
-            scheduleStartTime: new Date().toString(),
-            scheduleStartDate: new Date().toString(),
-            scheduleDuration: new Date().toString(),
-            scheduleEnabledUntil: new Date().toString(),
+            scheduleStartTime: "",
+            scheduleStartDate: "",
+            scheduleDuration: "00:00:00",
+            scheduleEnabledUntil: "2099-12-31",
             scheduleDays: "",
-            scheduleZoneIds: Array<string>(),
+            scheduleZoneIds: new Array<string>(),
             scheduleIsEnabled: true
         }
     }
@@ -88,16 +87,18 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             closeDialog: () => this.closeEditScheduleDialog(),
             removeSchedule: () => this.handleRemoveScheduleClick(),
             handleOnChange: this.onEditScheduleChange,
+            handleOnZoneSelectChange: this.onAddScheduleZoneChange,
+            getZones: () => this.state.zones,
             scheduleId: "",
             scheduleName: "",
             scheduleDescription: "",
             scheduleType: ScheduleType.DaysOfWeek,
-            scheduleStartTime: new Date().toTimeString(),
-            scheduleStartDate: new Date().toString(),
-            scheduleDuration: new Date().toString(),
-            scheduleEnabledUntil: new Date().toString(),
+            scheduleStartTime: "",
+            scheduleStartDate: "",
+            scheduleDuration: "00:00:00",
+            scheduleEnabledUntil: "2099-12-31",
             scheduleDays: "",
-            scheduleZoneIds: Array<string>(),
+            scheduleZoneIds: new Array<string>(),
             scheduleIsEnabled: true
         }
     }
@@ -209,18 +210,33 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
         event.preventDefault();
         let form = this.state.editScheduleDialogProps;
 
-        //let model = {
-        //    days: parseInt(form.),
-        //    description: form.scheduleDescription,
-        //    isEnabled: form.scheduleEnabled,
-        //    name: form.scheduleName
-        //} as Schedule;
-        //this.repo.update(form.scheduleId, model)
-        //    .catch(() => alert("Error updating schedule"))
-        //    .then(() => {
-        //        this.resetEditScheduleDialog();
-        //        this.loadSchedules();
-        //    });
+        let model = {
+            name: form.scheduleName,
+            description: form.scheduleDescription,
+            scheduleType: form.scheduleType,
+            duration: form.scheduleDuration,
+            enabledUntil: new Date(Date.parse(form.scheduleEnabledUntil)).toISOString(),
+            isEnabled: form.scheduleIsEnabled,
+            startTime: form.scheduleStartTime,
+            zoneIds: form.scheduleZoneIds
+        } as Schedule;
+
+        switch (form.scheduleType) {
+            case ScheduleType.DateTime:
+                model.startDate = new Date(Date.parse(form.scheduleStartDate)).toISOString();
+                break;
+            case ScheduleType.DaysOfMonth:
+            case ScheduleType.DaysOfWeek:
+                model.days = form.scheduleDays.split(",").map<number>((value) => { return parseInt(value); });
+                break;
+        }
+
+        this.scheduleRepo.update(form.scheduleId, model)
+            .catch(() => alert("Error"))
+            .then(() => {
+                this.resetEditScheduleDialog();
+                this.loadSchedules();
+            });
     }
 
     private handleRemoveScheduleClick() {
@@ -249,6 +265,7 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
         return <div className="row">
             <ScheduleList
                 schedules={this.state.schedules}
+                getZones={() => this.state.zones}
                 onAddScheduleClick={() => this.onAddScheduleClick()}
                 onEditScheduleClick={(e: any, id: string) => this.handleOnEditScheduleClick(e, id)}
             />

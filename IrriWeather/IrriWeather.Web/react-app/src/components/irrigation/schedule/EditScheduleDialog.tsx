@@ -1,5 +1,8 @@
 ﻿import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import ScheduleType from 'src/data/irrigation/schedule/api-models/ScheduleType';
+import Zone from 'src/data/irrigation/zones/Zone';
+import * as Cleave from 'cleave.js/react';
 
 export interface IEditScheduleDialogProps {
     visible: boolean;
@@ -9,10 +12,12 @@ export interface IEditScheduleDialogProps {
     closeDialog: any;
     removeSchedule: any;
     handleOnChange: any;
+    handleOnZoneSelectChange: any,
+    getZones: () => Array<Zone>;
     scheduleId: string;
     scheduleName: string;
     scheduleDescription: string;
-    scheduleType: string;
+    scheduleType: ScheduleType;
     scheduleStartTime: string;
     scheduleStartDate: string;
     scheduleDuration: string;
@@ -23,22 +28,72 @@ export interface IEditScheduleDialogProps {
 }
 
 export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
+    let getForm = (scheduleType: ScheduleType): any => {
+        switch (scheduleType) {
+            case ScheduleType.DateTime:
+                return (
+                    <div className='form-group' >
+                        <label htmlFor='scheduleStartDate' className='col-sm-4 control-label'>Start Date</label>
+                        <div>
+                            <input
+                                name="scheduleStartDate"
+                                type="date"
+                                placeholder=""
+                                autoComplete="off"
+                                onChange={props.handleOnChange}
+                                value={props.scheduleStartDate}
+                            />
+                        </div>
+                    </div>
+                );
+            case ScheduleType.DaysOfMonth:
+            case ScheduleType.DaysOfWeek:
+                return (
+                    <div className='form-group' >
+                        <label htmlFor='scheduleDays' className='col-sm-4 control-label'>Days</label>
+                        <div>
+                            <input
+                                name="scheduleDays"
+                                type="text"
+                                placeholder="Day numbers: '1,2,3'"
+                                autoComplete="off"
+                                onChange={props.handleOnChange}
+                                value={props.scheduleDays}
+                            />
+                        </div>
+                    </div>
+                );
+            case ScheduleType.EvenDays:
+            case ScheduleType.OddDays:
+                break;
+            default:
+                return <div></div>
+        }
+    }
+
+    let formatDate = (dateString: string): string => {
+        let date = new Date(dateString);
+        var yyyy = date.getFullYear();
+        var mm = date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1); // getMonth() is zero-based
+        var dd = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        return yyyy + "-" + mm + "-" + dd;
+    }
+
     return (
         <div className='box'>
             <Modal bsSize='large' show={props.visible} onHide={props.closeDialog} >
                 <form onSubmit={props.handleSubmit} className='form-horizontal' >
-                    <input name="scheduleId" type="text" value={props.scheduleId} hidden />
                     <Modal.Header closeButton>
-                        <Modal.Title>Edit Schedule</Modal.Title>
+                        <Modal.Title>Add New Schedule</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className='form-group' >
-                            <label htmlFor='scheduleName' className='col-sm-4 control-label'>Schedule Name</label>
+                            <label htmlFor='scheduleName' className='col-sm-4 control-label'>Name</label>
                             <div>
                                 <input
                                     name="scheduleName"
                                     type="text"
-                                    placeholder="Enter Schedule name"
+                                    placeholder=""
                                     autoComplete="off"
                                     onChange={props.handleOnChange}
                                     value={props.scheduleName}
@@ -51,7 +106,7 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                                 <input
                                     name="scheduleDescription"
                                     type="text"
-                                    placeholder="Enter a description"
+                                    placeholder=""
                                     autoComplete="off"
                                     onChange={props.handleOnChange}
                                     value={props.scheduleDescription}
@@ -59,10 +114,79 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                             </div>
                         </div>
                         <div className='form-group' >
-                            <label htmlFor='scheduleEnabled' className='col-sm-4 control-label'>Enabled</label>
+                            <label htmlFor='scheduleType' className='col-sm-4 control-label'>Type</label>
+                            <div>
+                                <select
+                                    name="scheduleType"
+                                    onChange={props.handleOnChange}
+
+                                >
+                                    {Object.keys(ScheduleType).map((value: string, index: number) => {
+                                        return <option key={index} value={value}>{value}</option>
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                        {getForm(props.scheduleType)}
+                        <div className='form-group' >
+                            <label htmlFor='scheduleStartTime' className='col-sm-4 control-label'>Start Time</label>
                             <div>
                                 <input
-                                    name="scheduleEnabled"
+                                    name="scheduleStartTime"
+                                    type="time"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={props.scheduleStartTime}
+                                />
+                            </div>
+                        </div>
+                        <div className='form-group' >
+                            <label htmlFor='scheduleDuration' className='col-sm-4 control-label'>Duration</label>
+                            <div>
+                                <Cleave
+                                    name="scheduleDuration"
+                                    placeholder="Enter duration"
+                                    options={{ time: true, timePattern: ['h', 'm', 's'] }}
+                                    onChange={props.handleOnChange}
+                                    value={props.scheduleDuration}
+                                />
+                            </div>
+                        </div>
+                        <div className='form-group' >
+                            <label htmlFor='scheduleZoneIds' className='col-sm-4 control-label'>Zones</label>
+                            <div>
+                                <select
+                                    name="scheduleZoneIds"
+                                    multiple
+                                    onChange={props.handleOnZoneSelectChange}
+                                    value={props.scheduleZoneIds}
+                                >
+                                     
+                                    {props.getZones().map((zone: Zone) => {
+                                        return <option key={zone.id} value={zone.id}>{zone.name}</option>
+                                    })}
+
+                                </select>
+                            </div>
+                        </div>
+                        <div className='form-group' >
+                            <label htmlFor='scheduleEnabledUntil' className='col-sm-4 control-label'>Enable Until</label>
+                            <div>
+                                <input
+                                    name="scheduleEnabledUntil"
+                                    type="date"
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={formatDate(props.scheduleEnabledUntil)}
+                                />
+                            </div>
+                        </div>
+                        <div className='form-group' >
+                            <label htmlFor='scheduleIsEnabled' className='col-sm-4 control-label'>Enabled</label>
+                            <div>
+                                <input
+                                    name="scheduleIsEnabled"
                                     type="checkbox"
                                     onChange={props.handleOnChange}
                                     checked={props.scheduleIsEnabled}

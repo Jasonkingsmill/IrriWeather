@@ -5,18 +5,20 @@ using System.Text;
 using Quartz;
 using System.Threading.Tasks;
 using System.Linq;
-
+using IrriWeather.Irrigation.Domain.Control;
 
 namespace IrriWeather.Irrigation.Application.Scheduling
 {
     public class ScheduleService
     {
         private readonly IScheduleRepository scheduleRepository;
+        private readonly IZoneRepository zoneRepository;
         private readonly IScheduler scheduler;
 
-        public ScheduleService(IScheduleRepository scheduleRepository, IScheduler scheduler)
+        public ScheduleService(IScheduleRepository scheduleRepository, IZoneRepository zoneRepository, IScheduler scheduler)
         {
             this.scheduleRepository = scheduleRepository;
+            this.zoneRepository = zoneRepository;
             this.scheduler = scheduler;
         }
         
@@ -25,7 +27,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             var schedules = scheduleRepository.FindAll();
             foreach (var schedule in schedules)
             {
-                if (schedule.IsEnabled)
+                if (schedule.IsEnabled && schedule.EnabledUntil > DateTime.Now)
                     AddToScheduler(schedule);
             }
 
@@ -37,7 +39,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         {
             var schedules = scheduleRepository.FindAll();
             var models = schedules.Select(sched => new ScheduleDto(sched.Id, sched.Name, sched.Description, sched.ScheduleType.ToString(), sched.StartTime, 
-                sched.StartDate, sched.Days, sched.IsEnabled, sched.Duration, sched.EnabledUntil, sched.Zones.Select(y=>y.Id)));
+                sched.StartDate, sched.Days, sched.IsEnabled, sched.Duration, sched.EnabledUntil, sched.ZoneIds)).ToList();
             return models;
         }
 
@@ -46,22 +48,36 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         {
             var factory = new ScheduleFactory();
             Schedule schedule = factory.CreateDateTimeSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            foreach(var id in cmd.ZoneIds)
+            {
+                var zone = zoneRepository.Find(id);
+                if (zone == null)
+                    throw new Exception($"Zone with id '{id}' does not exist");
+                schedule.AttachZone(id);
+            }
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled, 
-                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x=>x.Id));
+                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
         }
 
         public ScheduleDto AddDayOfMonthSchedule(AddDayOfMonthScheduleCommand cmd)
         {
             var factory = new ScheduleFactory();
             Schedule schedule = factory.CreateDayOfMonthSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            foreach (var id in cmd.ZoneIds)
+            {
+                var zone = zoneRepository.Find(id);
+                if (zone == null)
+                    throw new Exception($"Zone with id '{id}' does not exist");
+                schedule.AttachZone(id);
+            }
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
+                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
         }
 
 
@@ -69,11 +85,18 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         {
             var factory = new ScheduleFactory();
             Schedule schedule = factory.CreateDayOfWeekSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            foreach (var id in cmd.ZoneIds)
+            {
+                var zone = zoneRepository.Find(id);
+                if (zone == null)
+                    throw new Exception($"Zone with id '{id}' does not exist");
+                schedule.AttachZone(id);
+            }
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
+                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
         }
 
 
@@ -81,11 +104,18 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         {
             var factory = new ScheduleFactory();
             Schedule schedule = factory.CreateEvenDaysSchedule(cmd.Name, cmd.Description, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            foreach (var id in cmd.ZoneIds)
+            {
+                var zone = zoneRepository.Find(id);
+                if (zone == null)
+                    throw new Exception($"Zone with id '{id}' does not exist");
+                schedule.AttachZone(id);
+            }
             scheduleRepository.Add(schedule);
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
+                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
         }
 
 
@@ -97,7 +127,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.Zones.Select(x => x.Id));
+                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
         }
 
 
@@ -136,8 +166,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         private void AddToScheduler(Schedule schedule)
         {
             IDictionary<string, object> jobData = new Dictionary<string, object>();
-            jobData.Add("duration", schedule.Duration);
-            jobData.Add("zoneChannels", schedule.Zones.Select(x => x.Channel));
+            jobData.Add("scheduleId", schedule.Id);
 
 
             IJobDetail jobDetail = JobBuilder.Create<ZoneJob>()

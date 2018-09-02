@@ -33,6 +33,11 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
             return context.Zones.FirstOrDefault(x => x.Id == id);
         }
 
+        public IEnumerable<Zone> Find(IEnumerable<Guid> ids)
+        {
+            return context.Zones.Where(x => ids.Contains(x.Id)).ToList();
+        }
+
         public IEnumerable<Zone> FindAll()
         {
             return context.Zones.ToList();

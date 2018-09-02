@@ -158,7 +158,7 @@ namespace IrriWeather.Web.Controllers
         [HttpPost("schedules/datetime")]
         public IActionResult AddDateTimeSchedule([FromBody]AddScheduleViewModel model)
         {
-            var cmd = new AddDateTimeScheduleCommand(model.Name, model.Description, model.StartDate, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var cmd = new AddDateTimeScheduleCommand(model.Name, model.Description, model.StartDate, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled, model.ZoneIds);
             var sched = _scheduleService.AddDateTimeSchedule(cmd);
             var newschedule = new ScheduleSummaryViewModel()
             {
@@ -180,7 +180,7 @@ namespace IrriWeather.Web.Controllers
         [HttpPost("schedules/daysofmonth")]
         public IActionResult AddDaysOfMonthSchedule([FromBody]AddScheduleViewModel model)
         {
-            var cmd = new AddDayOfMonthScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var cmd = new AddDayOfMonthScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled, model.ZoneIds);
             var sched = _scheduleService.AddDayOfMonthSchedule(cmd);
             var newschedule = new ScheduleSummaryViewModel()
             {
@@ -202,7 +202,7 @@ namespace IrriWeather.Web.Controllers
         [HttpPost("schedules/daysofweek")]
         public IActionResult AddDaysOfWeekSchedule([FromBody]AddScheduleViewModel model)
         {
-            var cmd = new AddDayOfWeekScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var cmd = new AddDayOfWeekScheduleCommand(model.Name, model.Description, model.Days, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled, model.ZoneIds);
             var sched = _scheduleService.AddDayOfWeekSchedule(cmd);
             var newschedule = new ScheduleSummaryViewModel()
             {
@@ -225,7 +225,7 @@ namespace IrriWeather.Web.Controllers
         [HttpPost("schedules/evendays")]
         public IActionResult AddEvenDaysSchedule([FromBody]AddScheduleViewModel model)
         {
-            var cmd = new AddEvenDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var cmd = new AddEvenDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled, model.ZoneIds);
             var sched = _scheduleService.AddEvenDaysSchedule(cmd);
             var newschedule = new ScheduleSummaryViewModel()
             {
@@ -248,7 +248,7 @@ namespace IrriWeather.Web.Controllers
         [HttpPost("schedules/odddays")]
         public IActionResult AddOddDaysSchedule([FromBody]AddScheduleViewModel model)
         {
-            var cmd = new AddOddDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled);
+            var cmd = new AddOddDaysScheduleCommand(model.Name, model.Description, model.StartTime, model.Duration, model.EnabledUntil, model.IsEnabled, model.ZoneIds);
             var sched = _scheduleService.AddOddDaysSchedule(cmd);
             var newschedule = new ScheduleSummaryViewModel()
             {

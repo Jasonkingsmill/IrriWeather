@@ -3,6 +3,7 @@ using Quartz.Spi;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IrriWeather.Irrigation.Application.Scheduling
 {
@@ -22,8 +23,11 @@ namespace IrriWeather.Irrigation.Application.Scheduling
 
         public void ReturnJob(IJob job)
         {
-            // i couldn't find a way to release services with your preferred DI, 
-            // its up to you to google such things
+            var disposable = job as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }

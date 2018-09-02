@@ -6,7 +6,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
 {
     public class AddDayOfWeekScheduleCommand
     {
-        public AddDayOfWeekScheduleCommand(string name, string description, IEnumerable<int> days, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled)
+        public AddDayOfWeekScheduleCommand(string name, string description, IEnumerable<int> days, TimeSpan startTime, TimeSpan duration, DateTime enabledUntil, bool isEnabled, IEnumerable<Guid> zoneIds)
         {
             Name = name;
             Description = description;
@@ -15,6 +15,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             Duration = duration;
             EnabledUntil = enabledUntil;
             IsEnabled = isEnabled;
+            ZoneIds = zoneIds;
         }
 
         public string Name { get; }
@@ -24,5 +25,6 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         public TimeSpan Duration { get; private set; }
         public DateTime EnabledUntil { get; private set; }
         public bool IsEnabled { get; private set; }
+        public IEnumerable<Guid> ZoneIds { get; }
     }
 }

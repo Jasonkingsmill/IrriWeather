@@ -42,9 +42,8 @@ export let EditZoneDialog: any = (props: IEditZoneDialogProps) => {
                         <div className='form-group' >
                             <label htmlFor='zoneDescription' className='col-sm-4 control-label'>Description</label>
                             <div>
-                                <input
+                                <textarea
                                     name="zoneDescription"
-                                    type="text"
                                     placeholder="Enter a description"
                                     autoComplete="off"
                                     onChange={props.handleOnChange}

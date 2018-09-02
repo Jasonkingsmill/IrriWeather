@@ -2,6 +2,9 @@
 import { Button, Modal } from 'react-bootstrap';
 import { ScheduleType } from 'src/data/irrigation/schedule/api-models/ScheduleType';
 import Zone from 'src/data/irrigation/zones/Zone';
+import * as Cleave from 'cleave.js/react';
+import { ChangeEvent } from 'react';
+
 
 export interface IAddScheduleDialogProps {
     visible: boolean;
@@ -11,9 +14,8 @@ export interface IAddScheduleDialogProps {
     submitting: boolean;
     closeDialog: any;
     handleOnChange: any;
-    handleOnZoneSelectChange: any,
-    onEditScheduleClick: any;
-    getZones: () =>Array<Zone>;
+    handleOnZoneSelectChange: any;
+    getZones: () => Array<Zone>;
     scheduleName: string;
     scheduleDescription: string;
     scheduleType: ScheduleType;
@@ -70,6 +72,17 @@ export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
                 return <div></div>
         }
     }
+
+
+
+
+    let onDurationChange = (e: ChangeEvent) => {
+        props.handleOnChange();
+    }
+
+
+
+
     return (
         <div className='box'>
             <Modal bsSize='large' show={props.visible} onHide={props.closeDialog} >
@@ -135,14 +148,14 @@ export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
                         <div className='form-group' >
                             <label htmlFor='scheduleDuration' className='col-sm-4 control-label'>Duration</label>
                             <div>
-                                <input
+                                <Cleave
                                     name="scheduleDuration"
-                                    type="time"
-                                    placeholder=""
-                                    autoComplete="off"
+                                    placeholder="Enter duration"
+                                    options={{ time: true, timePattern: ['h', 'm', 's'] }}
                                     onChange={props.handleOnChange}
                                     value={props.scheduleDuration}
                                 />
+                                
                             </div>
                         </div>
                         <div className='form-group' >
@@ -151,7 +164,8 @@ export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
                                 <select
                                     name="scheduleZoneIds"
                                     multiple
-                                    onChange={props.handleOnZoneSelectChange}>
+                                    onChange={props.handleOnZoneSelectChange} >
+                                    <option key="none" disabled selected style={{ display: "none" }} ></option>
                                     {props.getZones().map((zone: Zone) => {
                                         return <option key={zone.id} value={zone.id}>{zone.name}</option>
                                     })}

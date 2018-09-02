@@ -27,7 +27,6 @@ namespace IrriWeather.Web
 
             services.AddTransient<ZoneJob>();
 
-            services.AddTransient<JobFactory>(x => new JobFactory(x));
 
             services.AddScoped<IrrigationContext>(x => new IrrigationContext(configuration.GetConnectionString("Irrigation")));
 
@@ -39,7 +38,7 @@ namespace IrriWeather.Web
 
             services.AddSingleton<RaspberryPiGpioService>();
             services.AddSingleton<RaspberryPiEmulationGpioService>();
-            services.AddScoped<IGpioService>(x =>
+            services.AddSingleton<IGpioService>(x =>
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     return x.GetRequiredService<RaspberryPiEmulationGpioService>();
@@ -52,6 +51,7 @@ namespace IrriWeather.Web
             services.AddScoped<ScheduleService>();
 
 
+            services.AddSingleton<JobFactory>(x => new JobFactory(x));
             services.AddSingleton<IScheduler>(x =>
             {
                 var scheduler = new StdSchedulerFactory().GetScheduler().ConfigureAwait(false).GetAwaiter().GetResult();
