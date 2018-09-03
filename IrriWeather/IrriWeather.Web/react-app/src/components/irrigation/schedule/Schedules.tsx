@@ -69,7 +69,7 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             scheduleDescription: "",
             scheduleType: ScheduleType.DaysOfWeek,
             scheduleStartTime: "",
-            scheduleStartDate: "",
+            scheduleStartDate: new Date().toISOString().slice(0, 10),
             scheduleDuration: "00:00:00",
             scheduleEnabledUntil: "2099-12-31",
             scheduleDays: "",
@@ -87,7 +87,7 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             closeDialog: () => this.closeEditScheduleDialog(),
             removeSchedule: () => this.handleRemoveScheduleClick(),
             handleOnChange: this.onEditScheduleChange,
-            handleOnZoneSelectChange: this.onAddScheduleZoneChange,
+            handleOnZoneSelectChange: this.onEditScheduleZoneChange,
             getZones: () => this.state.zones,
             scheduleId: "",
             scheduleName: "",
@@ -138,17 +138,16 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             name: form.scheduleName,       
             description: form.scheduleDescription,
             scheduleType: form.scheduleType,
+            startDate: new Date(Date.parse(form.scheduleStartDate)).toLocaleString(),
+            days: new Array<number>(),
             duration: form.scheduleDuration,
-            enabledUntil: new Date(Date.parse(form.scheduleEnabledUntil)).toISOString(),
+            enabledUntil: new Date(Date.parse(form.scheduleEnabledUntil)).toLocaleString(),
             isEnabled: form.scheduleIsEnabled,
             startTime: form.scheduleStartTime,
             zoneIds: form.scheduleZoneIds
         } as Schedule;
 
         switch (form.scheduleType) {
-            case ScheduleType.DateTime:
-                model.startDate = new Date(Date.parse(form.scheduleStartDate)).toISOString();
-                break;
             case ScheduleType.DaysOfMonth:
             case ScheduleType.DaysOfWeek:
                 model.days =  form.scheduleDays.split(",").map<number>((value) => { return parseInt(value); });
@@ -189,6 +188,16 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
         editScheduleDialogProps[e.target.name] = e.target.value;
         this.setState({ editScheduleDialogProps });
     }
+
+    private onEditScheduleZoneChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        var editScheduleDialogProps = { ...this.state.editScheduleDialogProps };
+        editScheduleDialogProps.scheduleZoneIds = new Array<string>();
+        for (let i = 0; i < e.target.selectedOptions.length; i++) {
+            editScheduleDialogProps.scheduleZoneIds.push(e.target.selectedOptions[i].value);
+        }
+        this.setState({ editScheduleDialogProps });
+    }
+
     private handleOnEditScheduleClick(e: any, id: string) {
         var editScheduleDialogProps = { ...this.state.editScheduleDialogProps }
         let schedule = this.state.schedules.find(z => z.id == id) as Schedule;
@@ -214,17 +223,16 @@ export class Schedules extends React.Component<RouteComponentProps<{}>, {}> {
             name: form.scheduleName,
             description: form.scheduleDescription,
             scheduleType: form.scheduleType,
+            startDate: new Date(Date.parse(form.scheduleStartDate)).toLocaleString(),
+            days: new Array<number>(),
             duration: form.scheduleDuration,
-            enabledUntil: new Date(Date.parse(form.scheduleEnabledUntil)).toISOString(),
+            enabledUntil: new Date(Date.parse(form.scheduleEnabledUntil)).toLocaleString(),
             isEnabled: form.scheduleIsEnabled,
             startTime: form.scheduleStartTime,
             zoneIds: form.scheduleZoneIds
         } as Schedule;
 
         switch (form.scheduleType) {
-            case ScheduleType.DateTime:
-                model.startDate = new Date(Date.parse(form.scheduleStartDate)).toISOString();
-                break;
             case ScheduleType.DaysOfMonth:
             case ScheduleType.DaysOfWeek:
                 model.days = form.scheduleDays.split(",").map<number>((value) => { return parseInt(value); });

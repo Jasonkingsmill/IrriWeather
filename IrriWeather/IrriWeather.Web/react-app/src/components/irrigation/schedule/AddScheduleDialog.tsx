@@ -32,22 +32,6 @@ export interface IAddScheduleDialogProps {
 export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
     let getForm = (scheduleType: ScheduleType): any => {
         switch (scheduleType) {
-            case ScheduleType.DateTime:
-                return (
-                    <div className='form-group' >
-                        <label htmlFor='scheduleStartDate' className='col-sm-4 control-label'>Start Date</label>
-                        <div>
-                            <input
-                                name="scheduleStartDate"
-                                type="date"
-                                placeholder=""
-                                autoComplete="off"
-                                onChange={props.handleOnChange}
-                                value={props.scheduleStartDate}
-                            />
-                        </div>
-                    </div>
-                );
             case ScheduleType.DaysOfMonth:
             case ScheduleType.DaysOfWeek:
                 return (
@@ -65,22 +49,10 @@ export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
                         </div>
                     </div>
                 );
-            case ScheduleType.EvenDays:
-            case ScheduleType.OddDays:
+            default:
                 break;
-            default: 
-                return <div></div>
         }
     }
-
-
-
-
-    let onDurationChange = (e: ChangeEvent) => {
-        props.handleOnChange();
-    }
-
-
 
 
     return (
@@ -131,7 +103,25 @@ export let AddScheduleDialog: any = (props: IAddScheduleDialogProps) => {
                                 </select>
                             </div>
                         </div>
+
+
                         {getForm(props.scheduleType)}
+
+
+                        <div className='form-group' >
+                            <label htmlFor='scheduleStartDate' className='col-sm-4 control-label'>Start Date</label>
+                            <div>
+                                <input
+                                    name="scheduleStartDate"
+                                    type="date"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={props.scheduleStartDate}
+                                />
+                            </div>
+                        </div>
+
                         <div className='form-group' >
                             <label htmlFor='scheduleStartTime' className='col-sm-4 control-label'>Start Time</label>
                             <div>

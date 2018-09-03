@@ -21,7 +21,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             this.zoneRepository = zoneRepository;
             this.scheduler = scheduler;
         }
-        
+
         public void InitializeScheduler()
         {
             var schedules = scheduleRepository.FindAll();
@@ -38,34 +38,42 @@ namespace IrriWeather.Irrigation.Application.Scheduling
         public IEnumerable<ScheduleDto> GetSchedules()
         {
             var schedules = scheduleRepository.FindAll();
-            var models = schedules.Select(sched => new ScheduleDto(sched.Id, sched.Name, sched.Description, sched.ScheduleType.ToString(), sched.StartTime, 
+            var models = schedules.Select(sched => new ScheduleDto(sched.Id, sched.Name, sched.Description, sched.ScheduleType.ToString(), sched.StartTime,
                 sched.StartDate, sched.Days, sched.IsEnabled, sched.Duration, sched.EnabledUntil, sched.ZoneIds)).ToList();
             return models;
         }
 
-        
-        public ScheduleDto AddDateTimeSchedule(AddDateTimeScheduleCommand cmd)
+
+
+
+        public ScheduleDto AddSchedule(AddScheduleCommand cmd)
         {
             var factory = new ScheduleFactory();
-            Schedule schedule = factory.CreateDateTimeSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
-            foreach(var id in cmd.ZoneIds)
+            Schedule schedule = null;
+            if (!Enum.TryParse(typeof(ScheduleType), cmd.ScheduleType, out var scheduleType))
             {
-                var zone = zoneRepository.Find(id);
-                if (zone == null)
-                    throw new Exception($"Zone with id '{id}' does not exist");
-                schedule.AttachZone(id);
+                throw new ArgumentException($"Invalid schedule type: '{cmd.ScheduleType}'", nameof(cmd.ScheduleType));
             }
-            scheduleRepository.Add(schedule);
 
-            AddToScheduler(schedule);
-            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled, 
-                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
-        }
+            switch (scheduleType)
+            {
+                case ScheduleType.DateTime:
+                    schedule = factory.CreateDateTimeSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+                    break;
+                case ScheduleType.DaysOfMonth:
+                    schedule = factory.CreateDayOfMonthSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+                    break;
+                case ScheduleType.DaysOfWeek:
+                    schedule = factory.CreateDayOfWeekSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+                    break;
+                case ScheduleType.EvenDays:
+                    schedule = factory.CreateEvenDaysSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+                    break;
+                case ScheduleType.OddDays:
+                    factory.CreateOddDaysSchedule(cmd.Name, cmd.Description, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+                    break;
+            }
 
-        public ScheduleDto AddDayOfMonthSchedule(AddDayOfMonthScheduleCommand cmd)
-        {
-            var factory = new ScheduleFactory();
-            Schedule schedule = factory.CreateDayOfMonthSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             foreach (var id in cmd.ZoneIds)
             {
                 var zone = zoneRepository.Find(id);
@@ -78,57 +86,47 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
                 schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
+
         }
 
 
-        public ScheduleDto AddDayOfWeekSchedule(AddDayOfWeekScheduleCommand cmd)
+
+        public ScheduleDto UpdateSchedule(UpdateScheduleCommand cmd)
         {
             var factory = new ScheduleFactory();
-            Schedule schedule = factory.CreateDayOfWeekSchedule(cmd.Name, cmd.Description, cmd.Days, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
+            Schedule schedule = scheduleRepository.Find(cmd.ScheduleId);
+            if (schedule == null)
+                throw new ArgumentException($"Schedule with id '{cmd.ScheduleId}' does not exist");
+
+
+            if (!Enum.TryParse(typeof(ScheduleType), cmd.ScheduleType, out var scheduleType))
+                throw new ArgumentException($"Invalid schedule type: '{cmd.ScheduleType}'", nameof(cmd.ScheduleType));
+
+            var newSchedule = new Schedule((ScheduleType)scheduleType, cmd.Name, cmd.Description, cmd.Days, cmd.StartDate, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
             foreach (var id in cmd.ZoneIds)
             {
                 var zone = zoneRepository.Find(id);
                 if (zone == null)
                     throw new Exception($"Zone with id '{id}' does not exist");
-                schedule.AttachZone(id);
+                newSchedule.AttachZone(id);
             }
-            scheduleRepository.Add(schedule);
+
+            var jobKey = BuildJobKey(schedule.Id);
+            var jobTrigger = BuildTriggerKey(schedule.Id);
+            scheduler.DeleteJob(jobKey);
+            scheduler.UnscheduleJob(jobTrigger);
+
+
+            schedule.UpdateFrom(newSchedule);
+            scheduleRepository.Update(schedule);
 
             AddToScheduler(schedule);
             return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
                 schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
+
         }
 
 
-        public ScheduleDto AddEvenDaysSchedule(AddEvenDaysScheduleCommand cmd)
-        {
-            var factory = new ScheduleFactory();
-            Schedule schedule = factory.CreateEvenDaysSchedule(cmd.Name, cmd.Description, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
-            foreach (var id in cmd.ZoneIds)
-            {
-                var zone = zoneRepository.Find(id);
-                if (zone == null)
-                    throw new Exception($"Zone with id '{id}' does not exist");
-                schedule.AttachZone(id);
-            }
-            scheduleRepository.Add(schedule);
-
-            AddToScheduler(schedule);
-            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
-        }
-
-
-        public ScheduleDto AddOddDaysSchedule(AddOddDaysScheduleCommand cmd)
-        {
-            var factory = new ScheduleFactory();
-            Schedule schedule = factory.CreateOddDaysSchedule(cmd.Name, cmd.Description, cmd.StartTime, cmd.Duration, cmd.EnabledUntil, cmd.IsEnabled);
-            scheduleRepository.Add(schedule);
-
-            AddToScheduler(schedule);
-            return new ScheduleDto(schedule.Id, schedule.Name, schedule.Description, schedule.ScheduleType.ToString(), schedule.StartTime, schedule.StartDate, schedule.Days, schedule.IsEnabled,
-                schedule.Duration, schedule.EnabledUntil, schedule.ZoneIds);
-        }
 
 
         public void RemoveSchedule(RemoveScheduleCommand cmd)
@@ -146,7 +144,7 @@ namespace IrriWeather.Irrigation.Application.Scheduling
             scheduler.UnscheduleJob(jobTrigger);
         }
 
-        
+
 
 
 
@@ -174,12 +172,17 @@ namespace IrriWeather.Irrigation.Application.Scheduling
                 .UsingJobData(new JobDataMap(jobData))
                 .Build();
 
-            ITrigger jobTrigger = TriggerBuilder.Create()
+
+            var triggerBuilder = TriggerBuilder.Create()
                 .WithIdentity(BuildTriggerKey(schedule.Id))
                 .ForJob(jobDetail)
                 .WithCronSchedule(schedule.BuildCronExpression())
-                .EndAt(schedule.EnabledUntil)
-                .Build();
+                .EndAt(schedule.EnabledUntil);
+
+            if (schedule.ScheduleType != ScheduleType.DateTime && schedule.StartDate.ToUniversalTime() > DateTime.UtcNow)
+                triggerBuilder.StartAt(schedule.StartDate.ToUniversalTime());
+
+            ITrigger jobTrigger = triggerBuilder.Build();
 
             scheduler.ScheduleJob(jobDetail, jobTrigger).ConfigureAwait(false).GetAwaiter().GetResult();
         }

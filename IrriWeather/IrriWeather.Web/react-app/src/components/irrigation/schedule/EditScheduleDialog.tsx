@@ -30,22 +30,6 @@ export interface IEditScheduleDialogProps {
 export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
     let getForm = (scheduleType: ScheduleType): any => {
         switch (scheduleType) {
-            case ScheduleType.DateTime:
-                return (
-                    <div className='form-group' >
-                        <label htmlFor='scheduleStartDate' className='col-sm-4 control-label'>Start Date</label>
-                        <div>
-                            <input
-                                name="scheduleStartDate"
-                                type="date"
-                                placeholder=""
-                                autoComplete="off"
-                                onChange={props.handleOnChange}
-                                value={props.scheduleStartDate}
-                            />
-                        </div>
-                    </div>
-                );
             case ScheduleType.DaysOfMonth:
             case ScheduleType.DaysOfWeek:
                 return (
@@ -63,11 +47,8 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                         </div>
                     </div>
                 );
-            case ScheduleType.EvenDays:
-            case ScheduleType.OddDays:
-                break;
             default:
-                return <div></div>
+                break;
         }
     }
 
@@ -119,7 +100,7 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                                 <select
                                     name="scheduleType"
                                     onChange={props.handleOnChange}
-
+                                    value={props.scheduleType}
                                 >
                                     {Object.keys(ScheduleType).map((value: string, index: number) => {
                                         return <option key={index} value={value}>{value}</option>
@@ -127,7 +108,27 @@ export let EditScheduleDialog: any = (props: IEditScheduleDialogProps) => {
                                 </select>
                             </div>
                         </div>
+
+
                         {getForm(props.scheduleType)}
+
+
+
+                        <div className='form-group' >
+                            <label htmlFor='scheduleStartDate' className='col-sm-4 control-label'>Start Date</label>
+                            <div>
+                                <input
+                                    name="scheduleStartDate"
+                                    type="date"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    onChange={props.handleOnChange}
+                                    value={formatDate(props.scheduleStartDate)}
+                                />
+                            </div>
+                        </div>
+
+
                         <div className='form-group' >
                             <label htmlFor='scheduleStartTime' className='col-sm-4 control-label'>Start Time</label>
                             <div>

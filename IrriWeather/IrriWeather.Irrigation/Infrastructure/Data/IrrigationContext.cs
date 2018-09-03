@@ -39,8 +39,10 @@ namespace IrriWeather.Irrigation.Infrastructure.Data
 
             modelBuilder.Entity<Schedule>(schedule =>
             {
-                schedule.Property(x => x.ZoneIds).HasField("_zoneIds").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Guid.Parse(y)).ToHashSet());
-                schedule.Property(x => x.Days).HasField("_days").HasConversion<string>(x => string.Join(";", x), x => x.Split(new char[] { ';' }).Select(y => Convert.ToInt32(y)).ToHashSet());
+                schedule.Property(x => x.ZoneIds).HasField("_zoneIds").HasConversion<string>(x => string.Join(";", x), 
+                    x => x == null ? new HashSet<Guid>() : x.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(y => Guid.Parse(y)).ToHashSet());
+                schedule.Property(x => x.Days).HasField("_days").HasConversion<string>(x => string.Join(";", x),
+                    x => x == null ? new HashSet<int>() : x.Split(";", StringSplitOptions.RemoveEmptyEntries).Select(y => Convert.ToInt32(y)).ToHashSet());
             });
         }
     }

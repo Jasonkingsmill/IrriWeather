@@ -21,8 +21,11 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
         {
         }
 
-        private Schedule(string name, string description, TimeSpan startTime, TimeSpan duration, DateTime? enabledUntil, bool isEnabled)
+        private Schedule(string name, string description, DateTime startDate, TimeSpan startTime, TimeSpan duration, DateTime? enabledUntil, bool isEnabled)
         {
+            
+            
+
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException(nameof(name), "Name must not be empty");
             if (startTime == null)
@@ -40,6 +43,7 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
 
             Name = name;
             Description = description ?? "";
+            StartDate = startDate;
             StartTime = startTime;
             Duration = duration;
             EnabledUntil = enabledUntil ?? DateTime.MaxValue;
@@ -48,18 +52,15 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
 
 
 
-        internal Schedule(ScheduleType scheduleType, string name, string description, IEnumerable<int> days, DateTime? startDate, TimeSpan startTime, TimeSpan duration, DateTime? enabledUntil, bool isEnabled) : this(name, description, startTime, duration, enabledUntil, isEnabled)
+        internal Schedule(ScheduleType scheduleType, string name, string description, IEnumerable<int> days, DateTime startDate, TimeSpan startTime, TimeSpan duration, DateTime? enabledUntil, bool isEnabled) : this(name, description, startDate, startTime, duration, enabledUntil, isEnabled)
         {
             ScheduleType = scheduleType;
 
             switch (scheduleType)
             {
                 case ScheduleType.DateTime:
-                    if (startDate == null)
-                        throw new ArgumentNullException(nameof(startDate));
-                    if (((DateTime)startDate).Date < DateTime.Now.Date)
-                        throw new ArgumentException(nameof(startDate), "StartDate must be into the future");
-                    StartDate = (DateTime)startDate;
+                    if (startDate.Date < DateTime.Now.Date)
+                        throw new ArgumentException(nameof(startDate), "StartDate for DateTime schedule type must be into the future");
                     break;
 
                 case ScheduleType.DaysOfMonth:
@@ -67,11 +68,6 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
                     foreach (var day in days)
                         AddDay(day);
                     break;
-
-                case ScheduleType.EvenDays:
-                case ScheduleType.OddDays:
-                default:
-                    throw new Exception();
             }
 
 
@@ -126,6 +122,20 @@ namespace IrriWeather.Irrigation.Domain.Scheduling
         {
             this._zoneIds.Clear();
             this.ZoneIds = zoneIds.ToHashSet();
+        }
+
+        public void UpdateFrom(Schedule schedule)
+        {
+            Name = schedule.Name;
+            Description = schedule.Description;
+            ScheduleType = schedule.ScheduleType;
+            StartDate = schedule.StartDate;
+            StartTime = schedule.StartTime;
+            Duration = schedule.Duration;
+            Days = schedule.Days;
+            EnabledUntil = schedule.EnabledUntil;
+            IsEnabled = schedule.IsEnabled;
+            ZoneIds = schedule.ZoneIds;
         }
 
         public void AttachZone(Guid zoneId)

@@ -55,7 +55,7 @@ export class ScheduleRepository {
 
     public async add(schedule: Schedule): Promise<Schedule | null> {
         let endpoint = this.getEndpoint(schedule.scheduleType);
-        let response = await fetch(this.baseUrl + "/" + endpoint, {
+        let response = await fetch(this.baseUrl, {
             method: "post",
             headers: {
                 'Accept': 'application/json',
